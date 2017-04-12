@@ -68,7 +68,7 @@ export default class TitleBar extends React.Component {
                                     whiteSpace:'nowrap',
                                     overflow:'hidden',
                                     textOverflow:'ellipsis'}}>
-                                User: {localStorage.getItem('apiKey') || "Unknown"} &nbsp;&nbsp;
+                                User: {localStorage.getItem('username') || "Unknown"} &nbsp;&nbsp;
                             </div>
                     </div>
                     <Button style={{display: 'flex', flex: 'none'}} id='button--base--update-api-key' onClick={this.props.showModal} text={Strings.update_key_button}/>

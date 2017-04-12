@@ -21,8 +21,9 @@ class App extends React.Component {
 
     // Our two points of entry (CredentialsModal/LandingPage) should give us
     // valid credentials or null.
-    setApiKey = (key) => {
-        localStorage.setItem('apiKey', key)
+    setCredentials = (username, password) => {
+        localStorage.setItem('username', username)
+        localStorage.setItem('password', password)
         this.forceUpdate()
     }
 
@@ -41,9 +42,9 @@ class App extends React.Component {
     render() {
         return (
             <BrowserRouter>
-                {localStorage.getItem('apiKey') == 'undefined'
-                    || localStorage.getItem('apiKey') == null
-                    || localStorage.getItem('apiKey') == '' ?
+                {localStorage.getItem('username') == 'undefined'
+                    || localStorage.getItem('username') == null
+                    || localStorage.getItem('username') == '' ?
                     <LandingPage setApiKey={this.setApiKey}/> :
                     <Base showModal={this.showModal}>
                         <Route exact path="/" component={Models}/>
@@ -51,7 +52,7 @@ class App extends React.Component {
                         <Route exact path="/update_model/:classifierID" render={UpdateModel}/>
                         <CredentialsModal
                             visible={this.state.showModal}
-                            setApiKey={this.setApiKey}/>
+                            setCredentials={this.setCredentials}/>
                     </Base>
                 }
             </BrowserRouter>

@@ -34,13 +34,14 @@ app.get('*', function(req, response) {
   response.sendFile(__dirname + '/dist/index.html');
 });
 
-app.post('/api/test_key', function(req, res) {
-    var api_key = req.query.api_key;
+app.post('/api/test_credentials', function(req, res) {
+    var username = req.query.username;
+    var password = req.query.password;
 
-    request.post('https://gateway-a.watsonplatform.net/visual-recognition/api')
-    .query({api_key: api_key})
+    request.post('https://stream.watsonplatform.net/speech-to-text/api/v1/')
+    .auth(username, password)
     .end(function(err, response) {
-        res.send({valid: !(response.body.statusInfo == 'invalid-api-key')});
+        res.send({valid: !(err.status == 401)});
     });
 })
 

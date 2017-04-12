@@ -119,10 +119,6 @@ export default class Models extends React.Component {
         this.forceUpdate()
     }
 
-    reloadServerData = () => {
-        this.loadClassifiersFromServer()
-    }
-
     render() {
         var self = this
         var classifiers = this.state.classifiers.map(function(classifier) {
@@ -141,7 +137,8 @@ export default class Models extends React.Component {
                 <div style={{margin: '21px 0px'}}>
                     <Button id="button--classifiers--create" text={Strings.create_classifier} kind={"bold"} icon={"/btn_create.png"} onClick={this.onClick}/>
                 </div>
-                <StackGrid columnWidth={300} gutterWidth={40}>{classifiers}</StackGrid>
+                {/*Hacky fix to line up grid*/}
+                <StackGrid style={{marginLeft: '-10px', marginRight: '-10px'}} columnWidth={300} gutterWidth={50}>{classifiers}</StackGrid>
             </div>
         )
     }

@@ -16,7 +16,7 @@ export default class CredentialsModal extends React.Component {
         var password = ReactDOM.findDOMNode(this.refs.password).value
         var modal = $(ReactDOM.findDOMNode(this))
 
-        var req = request.post('/api/test_key')
+        var req = request.post('/api/test_credentials')
 
         req.query({
             username: username,
@@ -26,7 +26,7 @@ export default class CredentialsModal extends React.Component {
         req.end(function(err, res) {
             if (res.body.valid) {
                 modal.modal('hide')
-                self.props.setApiKey(username)
+                self.props.setCredentials(username, password)
             } else {
                 self.setState({error: Strings.invalid_key})
             }
@@ -36,7 +36,7 @@ export default class CredentialsModal extends React.Component {
     logout = (e) => {
         e.preventDefault()
         $(ReactDOM.findDOMNode(this)).modal('hide')
-        this.props.setApiKey('')
+        this.props.setCredentials('', '')
     }
 
     componentWillReceiveProps(newProps) {

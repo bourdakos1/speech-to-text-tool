@@ -287,14 +287,14 @@ export default class LandingPage extends React.Component {
                 }} />
             {this.state.error && this.state.focus ? <div id='error--landing-page--api-key' style={error}>{Strings.invalid_key}</div> : null}
                 <form onSubmit={this.setApiKey}>
-                <input type='text'
-                    id='input--landing-page--api-key'
-                    className='myInputs'
-                    onFocus={this.onFocus}
-                    onBlur={this.onBlur}
-                    style={buttonStyle.base}
-                    placeholder={Strings.api_key}
-                    onChange={this.onTextChange}/>
+                    <input type='text'
+                        id='input--landing-page--api-key'
+                        className='myInputs'
+                        onFocus={this.onFocus}
+                        onBlur={this.onBlur}
+                        style={buttonStyle.base}
+                        placeholder={Strings.api_key}
+                        onChange={this.onTextChange}/>
                 {this.state.focus ? <button style={pics} id='button--landing-page--api-key' onMouseDown={this.setApiKey}/> : <button style={picsNone}/>}
                 </form>
                 <div style={getKey}><a id='link--landing-page--api-key' href='https://console.ng.bluemix.net/catalog/services/speech-to-text/' target='_blank' style={link}>{Strings.sign_up}</a></div>
