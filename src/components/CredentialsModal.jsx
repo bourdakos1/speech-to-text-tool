@@ -12,17 +12,21 @@ export default class CredentialsModal extends React.Component {
     saveApiKey = (e) => {
         e.preventDefault()
         var self = this
-        var key = ReactDOM.findDOMNode(this.refs.apiKey).value
+        var username = ReactDOM.findDOMNode(this.refs.username).value
+        var password = ReactDOM.findDOMNode(this.refs.password).value
         var modal = $(ReactDOM.findDOMNode(this))
 
         var req = request.post('/api/test_key')
 
-        req.query({ api_key: key })
+        req.query({
+            username: username,
+            password: password
+         })
 
         req.end(function(err, res) {
             if (res.body.valid) {
                 modal.modal('hide')
-                self.props.setApiKey(key)
+                self.props.setApiKey(username)
             } else {
                 self.setState({error: Strings.invalid_key})
             }
@@ -83,11 +87,17 @@ export default class CredentialsModal extends React.Component {
                       <form id="api-key-form" role="form" action="#">
                           <div className={this.state.error ? "form-group has-danger" : "form-group"}>
                               <input
+                                  style={{marginBottom: '12px'}}
                                   id='input--api-key-modal--api-key'
-                                  ref="apiKey"
+                                  ref="username"
                                   className="form-control"
                                   type="text"
-                                  placeholder=""/>
+                                  placeholder="username"/>
+                              <input
+                                  ref="password"
+                                  className="form-control"
+                                  type="text"
+                                  placeholder="password"/>
                           </div>
                       </form>
                   </div>

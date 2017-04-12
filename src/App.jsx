@@ -23,7 +23,7 @@ class App extends React.Component {
     // valid credentials or null.
     setApiKey = (key) => {
         localStorage.setItem('apiKey', key)
-        this.props.reloadServerData()
+        this.forceUpdate()
     }
 
     showModal = () => {
@@ -46,15 +46,9 @@ class App extends React.Component {
                     || localStorage.getItem('apiKey') == '' ?
                     <LandingPage setApiKey={this.setApiKey}/> :
                     <Base showModal={this.showModal}>
-                        <Route exact path="/" render={routeProps =>
-                            <Models {...routeProps} someProp={100}/>
-                        }/>
-                        <Route exact path="/create_model" render={routeProps =>
-                            <CreateModel {...routeProps}/>
-                        }/>
-                        <Route exact path="/update_model/:classifierID" render={routeProps =>
-                            <UpdateModel {...routeProps}/>
-                        }/>
+                        <Route exact path="/" component={Models}/>
+                        <Route exact path="/create_model" component={CreateModel}/>
+                        <Route exact path="/update_model/:classifierID" render={UpdateModel}/>
                         <CredentialsModal
                             visible={this.state.showModal}
                             setApiKey={this.setApiKey}/>
