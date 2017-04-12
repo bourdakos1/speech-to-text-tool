@@ -1,0 +1,25 @@
+html {
+   background: #fafafa;
+   font-size: 14px;
+}
+
+#main {
+    background: #fafafa;
+    padding-top: 66px;
+}
+
+#page-content-wrapper {
+    max-width: 1000px;
+    width: 100%;
+    margin: auto;
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizelegibility;
+}
+
+
+*:focus {
+    outline: none !important
+}
