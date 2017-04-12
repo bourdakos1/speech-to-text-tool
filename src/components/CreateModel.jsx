@@ -14,7 +14,7 @@ import Base from './Base'
 var myNum = 0
 
 @Radium
-export default class CreateClassifier extends React.Component {
+export default class CreateModel extends React.Component {
     constructor(props) {
         super(props)
         this.state = {

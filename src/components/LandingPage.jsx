@@ -297,7 +297,7 @@ export default class LandingPage extends React.Component {
                     onChange={this.onTextChange}/>
                 {this.state.focus ? <button style={pics} id='button--landing-page--api-key' onMouseDown={this.setApiKey}/> : <button style={picsNone}/>}
                 </form>
-                <div style={getKey}><a id='link--landing-page--api-key' href='https://console.ng.bluemix.net/catalog/services/visual-recognition/' target='_blank' style={link}>{Strings.sign_up}</a></div>
+                <div style={getKey}><a id='link--landing-page--api-key' href='https://console.ng.bluemix.net/catalog/services/speech-to-text/' target='_blank' style={link}>{Strings.sign_up}</a></div>
             </div>
         )
     }

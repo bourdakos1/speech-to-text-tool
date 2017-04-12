@@ -3,13 +3,13 @@ import request from 'superagent'
 import Radium from 'radium'
 import StackGrid from 'react-stack-grid'
 
-import ClassifierDetail from './ClassifierDetail'
+import ModelDetail from './ModelDetail'
 import Button from './Button'
 import Base from './Base'
 import Strings from './Strings'
 
 @Radium
-export default class Classifiers extends React.Component {
+export default class Models extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -62,6 +62,7 @@ export default class Classifiers extends React.Component {
     }
 
     loadClassifiersFromServer = () => {
+        console.log(this.props)
         var self = this
 
         var req = request.post('/api/list_classifiers')
@@ -126,7 +127,7 @@ export default class Classifiers extends React.Component {
         var self = this
         var classifiers = this.state.classifiers.map(function(classifier) {
             return (
-                <ClassifierDetail
+                <ModelDetail
                     history={self.props.history}
                     classifierID={classifier.customization_id}
                     name={classifier.name}
@@ -136,14 +137,12 @@ export default class Classifiers extends React.Component {
             )
         })
         return (
-            <Base reloadServerData={this.reloadServerData}>
-                <div>
-                    <div style={{margin: '21px 0px'}}>
-                        <Button id="button--classifiers--create" text={Strings.create_classifier} kind={"bold"} icon={"/btn_create.png"} onClick={this.onClick}/>
-                    </div>
-                    <StackGrid columnWidth={300} gutterWidth={40}>{classifiers}</StackGrid>
+            <div>
+                <div style={{margin: '21px 0px'}}>
+                    <Button id="button--classifiers--create" text={Strings.create_classifier} kind={"bold"} icon={"/btn_create.png"} onClick={this.onClick}/>
                 </div>
-            </Base>
+                <StackGrid columnWidth={300} gutterWidth={40}>{classifiers}</StackGrid>
+            </div>
         )
     }
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import Button from './Button'
-import ApiKeyModal from './ApiKeyModal'
+import CredentialsModal from './CredentialsModal'
 import Styles from './Styles'
 import Strings from './Strings'
 
@@ -71,7 +71,7 @@ export default class TitleBar extends React.Component {
                                 User: {localStorage.getItem('apiKey') || "Unknown"} &nbsp;&nbsp;
                             </div>
                     </div>
-                    <Button style={{display: 'flex', flex: 'none'}} id='button--base--update-api-key' onClick={this.props.onClick} text={Strings.update_key_button}/>
+                    <Button style={{display: 'flex', flex: 'none'}} id='button--base--update-api-key' onClick={this.props.showModal} text={Strings.update_key_button}/>
                 </div>
             </div>
         )

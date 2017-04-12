@@ -8,7 +8,7 @@ import Styles from './Styles'
 import Strings from './Strings'
 
 @Radium
-export default class ApiKeyModal extends React.Component {
+export default class CredentialsModal extends React.Component {
     saveApiKey = (e) => {
         e.preventDefault()
         var self = this
@@ -35,13 +35,16 @@ export default class ApiKeyModal extends React.Component {
         this.props.setApiKey('')
     }
 
-    componentDidMount() {
-        $(ReactDOM.findDOMNode(this)).modal('show')
-        $(ReactDOM.findDOMNode(this)).on('hidden.bs.modal', this.props.handleHideModal)
+    componentWillReceiveProps(newProps) {
+        if (newProps.visible) {
+            $(ReactDOM.findDOMNode(this)).modal('show')
+            $(ReactDOM.findDOMNode(this)).on('hidden.bs.modal', this.props.handleHideModal)
+        } else {
+            $(ReactDOM.findDOMNode(this)).modal('hide')
+        }
     }
 
     render() {
-
         var deleteStyle = {
             backgroundColor: 'transparent',
             backgroundImage: `url(${'/btn_delete.png'})`,
@@ -75,7 +78,7 @@ export default class ApiKeyModal extends React.Component {
                   </div>
                   <div className="modal-body">
                       <p>{Strings.key_modal_description}</p>
-                      <p><a href='https://console.ng.bluemix.net/registration/?target=/catalog/services/visual-recognition/'>{Strings.sign_up}</a></p>
+                      <p><a href='https://console.ng.bluemix.net/catalog/services/speech-to-text/' target='_blank'>{Strings.sign_up}</a></p>
                       {this.state.error ? <p id='error--api-key-modal--api-key' style={error}>{this.state.error}</p> : null}
                       <form id="api-key-form" role="form" action="#">
                           <div className={this.state.error ? "form-group has-danger" : "form-group"}>

@@ -1,14 +1,12 @@
 import React from 'react'
 import Radium, { StyleRoot } from 'radium'
-import recognizeMicrophone from 'watson-speech/speech-to-text/recognize-microphone'
-// import recognizeFile from 'watson-speech/speech-to-text/recognize-file';
 
 import Styles from './Styles'
 import Strings from './Strings'
 
 
 @Radium
-export default class DropButton extends React.Component {
+export default class MicButton extends React.Component {
     constructor(props) {
         super(props)
         this.state = {

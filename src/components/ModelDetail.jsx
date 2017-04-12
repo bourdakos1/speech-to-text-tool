@@ -5,14 +5,14 @@ import { Tooltip } from 'reactstrap'
 
 import Styles from './Styles'
 import Strings from './Strings'
-import ResultList from './ResultList'
+import Transcript from './Transcript'
 import MicButton from './MicButton'
 import DropButton from './DropButton'
 import Card from './Card'
 import DropDown from './DropDown'
 
 @Radium
-export default class ClassifierDetail extends React.Component {
+export default class ModelDetail extends React.Component {
     constructor(props) {
         super(props)
         this.state = {

@@ -90,7 +90,7 @@ export default class DropDown extends React.Component {
                 onMouseLeave={this.toggleHover}>
                 <button className={this.props.className} style={dropbtn}></button>
                 <div style={dropdownContent}>
-                    <a className='link--classifiers--api-reference' style={[aStyle, aa]} key='0' href='https://www.ibm.com/watson/developercloud/visual-recognition/api/v3/?node#classify_an_image' target='_blank'>{Strings.api_reference}</a>
+                    <a className='link--classifiers--api-reference' style={[aStyle, aa]} key='0' href='https://www.ibm.com/watson/developercloud/speech-to-text/api/v1/?node#recognize_audio_websockets' target='_blank'>{Strings.api_reference}</a>
                     <a className='link--classifiers--update' style={[aStyle, ab]} key='1' href="#" onClick={this.props.update}>{Strings.update}</a>
                     <a className='link--classifiers--delete' style={[aStyle, ac, {color: '#f44336'}]} key='2' href="#" onClick={this.props.delete}>{Strings.delete}</a>
                 </div>

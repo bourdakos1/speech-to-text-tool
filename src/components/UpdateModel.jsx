@@ -14,7 +14,7 @@ import Base from './Base'
 var myNum = 2
 
 @Radium
-export default class UpdateClassifier extends React.Component {
+export default class UpdateModel extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -248,50 +248,48 @@ export default class UpdateClassifier extends React.Component {
 
         var self = this
         return (
-            <Base reloadServerData={this.reloadServerData}>
-                <div>
-                    <div style={[textStyles.header, {marginTop: '30px', marginBottom: '5px'}]}>
-                        {Strings.update_classifier}
-                    </div>
-                    <div style={[textStyles.base, {marginTop: '5px', marginBottom: '18px'}]}>
-                        {Strings.create_classifier_description}
-                    </div>
-                    <TitleCard
-                        errors={self.state.errors}
-                        placeholder='Classifier name'
-                        title={self.state.classifierName}
-                        fixedTitle={true}
-                        onChange={this.onTextChange}
-                        inputStyle={textStyles.header}>
-                        {self.state.error ? <div style={error}>{self.state.error}</div> : null}
-                        <StackGrid columnWidth={292} gutterWidth={40} style={{marginTop: '10px'}}>{this.state.classes.map(function(c, i) {
-                            return (
-                                <Class
-                                    errors={self.state.errors}
-                                    negative={c.negative}
-                                    title={c.name}
-                                    fixedTitle={c.defaultClass}
-                                    style={{maxWidth:'30rem'}}
-                                    key={c.id}
-                                    id={i}
-                                    setClassFile={self.setClassFile}
-                                    setClassName={self.setClassName}
-                                    delete={self.deleteClass}/>
-                            )
-                        })}</StackGrid>
-                        <div style={{textAlign: 'right'}}>
-                            <Button onClick={this.addClass} text={Strings.add_class} style={{float: 'left'}}/>
-                            <Button onClick={this.cancel} text={Strings.cancel} style={{marginRight: '20px'}}/>
-                            <Button onClick={this.errorCheck} text={Strings.update} kind='bold'/>
-                        </div>
-                    </TitleCard>
-                    {this.state.upload ?
-                        <ProgressModal
-                            title={Strings.updating_classifier} load={this.create}/>
-                        : null
-                    }
+            <div>
+                <div style={[textStyles.header, {marginTop: '30px', marginBottom: '5px'}]}>
+                    {Strings.update_classifier}
                 </div>
-            </Base>
+                <div style={[textStyles.base, {marginTop: '5px', marginBottom: '18px'}]}>
+                    {Strings.create_classifier_description}
+                </div>
+                <TitleCard
+                    errors={self.state.errors}
+                    placeholder='Classifier name'
+                    title={self.state.classifierName}
+                    fixedTitle={true}
+                    onChange={this.onTextChange}
+                    inputStyle={textStyles.header}>
+                    {self.state.error ? <div style={error}>{self.state.error}</div> : null}
+                    <StackGrid columnWidth={292} gutterWidth={40} style={{marginTop: '10px'}}>{this.state.classes.map(function(c, i) {
+                        return (
+                            <Class
+                                errors={self.state.errors}
+                                negative={c.negative}
+                                title={c.name}
+                                fixedTitle={c.defaultClass}
+                                style={{maxWidth:'30rem'}}
+                                key={c.id}
+                                id={i}
+                                setClassFile={self.setClassFile}
+                                setClassName={self.setClassName}
+                                delete={self.deleteClass}/>
+                        )
+                    })}</StackGrid>
+                    <div style={{textAlign: 'right'}}>
+                        <Button onClick={this.addClass} text={Strings.add_class} style={{float: 'left'}}/>
+                        <Button onClick={this.cancel} text={Strings.cancel} style={{marginRight: '20px'}}/>
+                        <Button onClick={this.errorCheck} text={Strings.update} kind='bold'/>
+                    </div>
+                </TitleCard>
+                {this.state.upload ?
+                    <ProgressModal
+                        title={Strings.updating_classifier} load={this.create}/>
+                    : null
+                }
+            </div>
         )
     }
 }

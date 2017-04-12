@@ -10,7 +10,7 @@ function capitalizeFirstLetter(string) {
 }
 
 @Radium
-export default class ResultList extends React.Component {
+export default class Transcript extends React.Component {
     render(){
         var textStyles = {
             base: {
