@@ -61,28 +61,27 @@ export default class ModelDetail extends React.Component {
         var req
         self.setState({ error: null }, self.stateChanged)
         if (files == null || files.length <= 0) {
-            if (rejects != null && rejects[0].size > 2 * 1024 * 1024 && (rejects[0].type == 'image/jpeg' || rejects[0].type == 'image/png') ) {
+            if (rejects != null && rejects[0].size > 200 * 1024 * 1024
+                && (rejects[0].type == 'audio/wav'
+                || rejects[0].type == 'audio/l16'
+                || rejects[0].type == 'audio/ogg'
+                || rejects[0].type == 'audio/flac')) {
                 self.setState({ error: Strings.mb2_error }, self.stateChanged)
                 return
             }
             self.setState({ error: Strings.invalid_image_error }, self.stateChanged)
             return
         }
-        if (this.props.classifierID == null && this.props.name == 'Faces') {
-            req = request.post('/api/detect_faces')
-        } else if (this.props.classifierID == null && this.props.name == 'Text') {
-            req = request.post('/api/recognize_text')
-        } else {
-            req = request.post('/api/classify')
-            req.query({classifier_ids: [this.props.classifierID]})
-            req.query({threshold: 0.0})
-        }
+
+        req = request.post('/api/classify')
+        req.query({customization_id: this.props.classifierID})
 
         if (files[0]) {
             req.attach('file', files[0])
         }
 
-        req.query({api_key: localStorage.getItem('apiKey')})
+        req.query({username: localStorage.getItem('username')})
+        req.query({password: localStorage.getItem('password')})
 
         req.on('progress', function(e) {
             console.log(e.direction + ' Percentage done: ' + e.percent)
@@ -99,39 +98,7 @@ export default class ModelDetail extends React.Component {
             onProgress(100)
             console.log(res)
             var results = res.body.results[0].alternatives[0].transcript
-            // if (res.body != null && res.body.images != null) {
-            //     if (res.body.images[0].classifiers != null && res.body.images[0].classifiers.length > 0 ) {
-            //         results = res.body.images[0].classifiers[0].classes
-            //         results.sort(function(a, b) {
-            //             return b.score - a.score
-            //         })
-            //     } else if (res.body.images[0].faces != null && res.body.images[0].faces.length > 0) {
-            //         results = res.body.images[0].faces
-            //     } else if (res.body.images[0].faces != null) {
-            //         self.setState({ error: Strings.faces_error }, self.stateChanged)
-            //     } else if (res.body.images[0].words != null && res.body.images[0].words.length > 0) {
-            //         results = res.body.images[0].words
-            //     } else if (res.body.images[0].words != null) {
-            //         self.setState({ error: 'No text found' }, self.stateChanged)
-            //     } else if (res.body.images[0].error != null) {
-            //         console.error(res.body.images[0].error.description)
-            //         if (res.body.images[0].error.description == 'Image size limit exceeded (2935034 bytes > 2097152 bytes [2 MiB]).') {
-            //             self.setState({ error: Strings.mb2_error }, self.stateChanged)
-            //         } else {
-            //             self.setState({ error: res.body.images[0].error.description }, self.stateChanged)
-            //         }
-            //     }
-            // } else if (res.body.code == 'LIMIT_FILE_SIZE') {
-            //     self.setState({ error: Strings.mb2_error }, self.stateChanged)
-            // } else if (res.body.error != null) {
-            //     var error = res.body.error
-            //     self.setState({ error: error }, self.stateChanged)
-            // } else {
-            //     console.error(err)
-            //     var error = Strings.unknown_error
-            //     self.setState({ error: error }, self.stateChanged)
-            // }
-            self.setState({ file: files[0], results: results }, self.stateChanged)
+            self.setState({ results: results }, self.stateChanged)
             onFinished()
         })
     }
@@ -247,7 +214,7 @@ export default class ModelDetail extends React.Component {
                             disabled={true}/>
                     }
                     {recognizeMicrophone.isSupported ?
-                        <MicButton clearTransciption={this.clearTransciption} onTransciption={this.onTransciption} style={{marginLeft: '12px', width: '48px'}}/> :
+                        <MicButton clearTransciption={this.clearTransciption} customizationID={this.props.classifierID} onTransciption={this.onTransciption} style={{marginLeft: '12px', width: '48px'}}/> :
                         null
                     }
                 </div>

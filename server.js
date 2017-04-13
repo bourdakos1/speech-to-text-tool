@@ -129,7 +129,7 @@ var storage = multer.diskStorage({
 const upload = multer({
     limits: {
         files: 1,
-        fileSize: 999 * 1024 * 1024 // 2mb
+        fileSize: 200 * 1024 * 1024 // 2mb
     },
     fileFilter: function(req, file, cb) {
         // var type = file.mimetype;
@@ -151,20 +151,19 @@ app.post('/api/classify', function(req, res) {
         }
 
         var speech_to_text = new SpeechToTextV1 ({
-          username: '5b4f8307-0a64-4114-93f4-4d28a30a2e82',
-          password: 'Vuolrx2GcF7m'
+          username: req.query.username,
+          password: req.query.password
         });
 
-        var params = {
-            content_type: 'audio/wav',
-            continuous: true,
-            customization_id: '3a731300-1f0f-11e7-a25c-3515edf602ac'
-        };
+        var params = req.query
+
+        params.content_type = 'audio/wav';
+        params.continuous = true;
 
         // var params = req.query;
         params.audio = fs.createReadStream(req.file.path);
-        console.log(req.file.path)
-        console.log(req.file)
+
+        console.log(mime.lookup(req.file.path));
 
         speech_to_text.recognize(params, function(err, data) {
             fs.unlinkSync(req.file.path);

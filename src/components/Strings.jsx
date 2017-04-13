@@ -16,7 +16,7 @@ module.exports = {
   faces_error: 'No faces found',
   unknown_error: 'Unknown error',
   drag_image: 'Drag audio here to test',
-  choose_image: 'choose your file',
+  choose_image: 'choose a file',
   create_classifier: 'Create a model',
   visual_recognition_tool: 'Speech to Text Tool',
   api_key: 'Credentials',

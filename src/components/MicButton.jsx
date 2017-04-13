@@ -41,15 +41,28 @@ export default class MicButton extends React.Component {
                     self.stream.recognizeStream.removeAllListeners()
                 }
 
-                self.stream = recognizeMicrophone({
-                    token: res.body.token,
-                    smart_formatting: true, // formats phone numbers, currency, etc. (server-side)
-                    format: true, // adds capitals, periods, and a few other things (client-side)
-                    model: 'en-US_BroadbandModel',
-                    objectMode: true,
-                    interim_results: true,
-                    continuous: true
-                })
+                if (self.props.customizationID) {
+                    self.stream = recognizeMicrophone({
+                        token: res.body.token,
+                        smart_formatting: true, // formats phone numbers, currency, etc. (server-side)
+                        format: true, // adds capitals, periods, and a few other things (client-side)
+                        model: 'en-US_BroadbandModel',
+                        customization_id: self.props.customizationID,
+                        objectMode: true,
+                        interim_results: true,
+                        continuous: true
+                    })
+                } else {
+                    self.stream = recognizeMicrophone({
+                        token: res.body.token,
+                        smart_formatting: true, // formats phone numbers, currency, etc. (server-side)
+                        format: true, // adds capitals, periods, and a few other things (client-side)
+                        model: 'en-US_BroadbandModel',
+                        objectMode: true,
+                        interim_results: true,
+                        continuous: true
+                    })
+                }
 
                 // grab the formatted messages and also handle errors and such
                 self.stream.on('data', (msg) => {

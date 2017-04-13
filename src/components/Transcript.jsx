@@ -78,11 +78,11 @@ export default class Transcript extends React.Component {
                 <div style={imgStyle}>
                     <div style={divider}></div>
                     <div style={textbox}>
-                        {this.props.results.map(msg => {
+                        {this.props.results.results? this.props.results.map(msg => {
                             return msg.results.map((result, i) => (
                                 <span key={`result-${msg.result_index + i}`}>{result.alternatives[0].transcript}</span>
                             ));
-                        }).reduce((a, b) => a.concat(b), [])}
+                        }).reduce((a, b) => a.concat(b), []): this.props.results}
                     </div>
                 </div>
             </div>
