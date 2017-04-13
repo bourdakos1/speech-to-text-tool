@@ -2,6 +2,7 @@ import React from 'react'
 import request from 'superagent'
 import Radium from 'radium'
 import { Tooltip } from 'reactstrap'
+import recognizeMicrophone from 'watson-speech/speech-to-text/recognize-microphone'
 
 import Styles from './Styles'
 import Strings from './Strings'
@@ -16,7 +17,8 @@ export default class ModelDetail extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            tooltipOpen: false
+            tooltipOpen: false,
+            transcript: []
         }
     }
 
@@ -134,8 +136,27 @@ export default class ModelDetail extends React.Component {
         })
     }
 
+    getResults = () => {
+        const final = this.state.transcript.filter(r => r.results && r.results.length && r.results[0].final)
+        const interim = this.state.transcript[this.state.transcript.length - 1]
+        if (!(!interim || !interim.results || !interim.results.length || interim.results[0].final)) {
+            final.push(interim);
+        }
+        return final
+    }
+
+    clearTransciption = () => {
+        this.setState({ file: null, results: null, transcript: [] }, this.stateChanged)
+    }
+
+    onTransciption = (result) => {
+        this.setState({transcript: this.state.transcript.concat(result)}, () => {
+            this.setState({ results: this.getResults() }, this.stateChanged)
+        })
+    }
+
     clearClassifier = () => {
-        this.setState({ file: null, results: null }, this.stateChanged)
+        this.setState({ file: null, results: null, transcript: [] }, this.stateChanged)
     }
 
     render() {
@@ -225,9 +246,12 @@ export default class ModelDetail extends React.Component {
                             subtext={Strings.choose_image}
                             disabled={true}/>
                     }
-                    <MicButton style={{marginLeft: '12px', width: '48px'}}/>
+                    {recognizeMicrophone.isSupported ?
+                        <MicButton clearTransciption={this.clearTransciption} onTransciption={this.onTransciption} style={{marginLeft: '12px', width: '48px'}}/> :
+                        null
+                    }
                 </div>
-                {this.state.results ? <ResultList id={this.props.classifierID || this.props.name} clearClassifier={this.clearClassifier} file={this.state.file} results={this.state.results}/> : null}
+                {this.state.results ? <Transcript id={this.props.classifierID || this.props.name} clearClassifier={this.clearClassifier} file={this.state.file} results={this.state.results}/> : null}
             </Card>
         )
     }

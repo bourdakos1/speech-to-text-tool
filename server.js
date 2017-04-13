@@ -2,6 +2,7 @@ var path = require('path');
 var express = require('express');
 var VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
 var SpeechToTextV1 = require('watson-developer-cloud/speech-to-text/v1');
+var AuthorizationV1 = require('watson-developer-cloud/authorization/v1');
 var fileUpload = require('express-fileupload');
 var request = require('superagent');
 var multer = require('multer');
@@ -27,11 +28,29 @@ if(process.env.NODE_ENV !== 'production') {
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/', function(request, response) {
-  response.sendFile(__dirname + '/dist/index.html')
+    response.sendFile(__dirname + '/dist/index.html')
 });
 
 app.get('*', function(req, response) {
-  response.sendFile(__dirname + '/dist/index.html');
+    response.sendFile(__dirname + '/dist/index.html');
+});
+
+app.post('/api/token', function(req, res) {
+    var stt = new SpeechToTextV1({
+        username: req.query.username,
+        password: req.query.password
+    });
+
+    var authService = new AuthorizationV1(stt.getCredentials());
+
+    authService.getToken(function(err, token) {
+        if (err) {
+            res.send(err);
+            return;
+        } else {
+            res.send({token: token});
+        }
+    });
 });
 
 app.post('/api/test_credentials', function(req, res) {
