@@ -64,13 +64,32 @@ app.post('/api/test_credentials', function(req, res) {
     });
 })
 
-app.post('/api/list_classifiers', function(req, res) {
+app.post('/api/list_models', function(req, res) {
     var speech_to_text = new SpeechToTextV1 ({
-        username: '5b4f8307-0a64-4114-93f4-4d28a30a2e82',
-        password: 'Vuolrx2GcF7m'
+        username: req.query.username,
+        password: req.query.password
     });
 
     speech_to_text.getCustomizations(null, function(err, data) {
+        if (err) {
+            res.send(err);
+            return;
+        }
+        res.send(data);
+	});
+});
+
+app.post('/api/create_model', function(req, res) {
+    var speech_to_text = new SpeechToTextV1 ({
+        username: req.query.username,
+        password: req.query.password
+    });
+
+    var params = req.query
+
+    params.base_model_name = 'en-US_BroadbandModel'
+
+    speech_to_text.createCustomization(params, function(err, data) {
         if (err) {
             res.send(err);
             return;
@@ -143,7 +162,7 @@ const upload = multer({
 });
 
 var fileUpload = upload.single('file')
-app.post('/api/classify', function(req, res) {
+app.post('/api/transcribe', function(req, res) {
     fileUpload(req, res, function (err) {
         if (err) {
             res.send(err);

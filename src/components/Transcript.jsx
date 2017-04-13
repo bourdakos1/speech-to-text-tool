@@ -78,13 +78,20 @@ export default class Transcript extends React.Component {
                 <div style={imgStyle}>
                     <div style={divider}></div>
                     <div style={textbox}>
-                        {this.props.results[0].results? this.props.results.map(msg => {
-                            return msg.results.map((result, i) => (
-                                <span key={`result-${msg.result_index + i}`}>{result.alternatives[0].transcript}</span>
-                            ));
-                        }).reduce((a, b) => a.concat(b), []): this.props.results}
+                        {this.props.results}
                     </div>
                 </div>
+
+                {this.props.results == 'I love the eighties. '?
+                    <div style={imgStyle}>
+                        <div style={textbox}>
+                            <video width='100%' autoPlay>
+                                <source src='/IBM_Commercial_86.mp4' type='video/mp4'/>
+                            </video>
+                        </div>
+                    </div> :
+                    null
+                }
             </div>
         )
     }

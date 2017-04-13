@@ -73,7 +73,7 @@ export default class ModelDetail extends React.Component {
             return
         }
 
-        req = request.post('/api/classify')
+        req = request.post('/api/transcribe')
         req.query({customization_id: this.props.classifierID})
 
         if (files[0]) {
@@ -109,7 +109,16 @@ export default class ModelDetail extends React.Component {
         if (!(!interim || !interim.results || !interim.results.length || interim.results[0].final)) {
             final.push(interim);
         }
-        return final
+
+        var text = ''
+
+        final.map(msg => {
+            for (var i in msg.results) {
+                text +=  msg.results[i].alternatives[0].transcript
+            }
+        }).reduce((a, b) => a.concat(b), [])
+
+        return text
     }
 
     clearTransciption = () => {

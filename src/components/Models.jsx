@@ -65,9 +65,9 @@ export default class Models extends React.Component {
         console.log(this.props)
         var self = this
 
-        var req = request.post('/api/list_classifiers')
-        req.query({ api_key: localStorage.getItem('apiKey') })
-        req.query({ verbose: true })
+        var req = request.post('/api/list_models')
+        req.query({ username: localStorage.getItem('username') })
+        req.query({ password: localStorage.getItem('password') })
 
         req.end(function(err, res) {
             console.log(res)
@@ -105,6 +105,7 @@ export default class Models extends React.Component {
     onClick = () => {
         var name = prompt("Please choose a name for your model", "My Custom Model");
         if (name) {
+            var self = this
             var req = request.post('/api/create_model')
 
             req.query({ username: localStorage.getItem('username') })
@@ -113,7 +114,8 @@ export default class Models extends React.Component {
             req.query({ name: name })
 
             req.end(function(err, res) {
-                this.props.history.push('/update_model/3a731300-1f0f-11e7-a25c-3515edf602ac')
+                console.log(res.body.customization_id)
+                self.props.history.push('/update_model/' + res.body.customization_id)
             })
         }
     }
