@@ -45,7 +45,7 @@ class App extends React.Component {
                 {localStorage.getItem('username') == 'undefined'
                     || localStorage.getItem('username') == null
                     || localStorage.getItem('username') == '' ?
-                    <LandingPage setApiKey={this.setApiKey}/> :
+                    <LandingPage setCredentials={this.setCredentials}/> :
                     <Base showModal={this.showModal}>
                         <Route exact path="/" component={Models}/>
                         <Route exact path="/create_model" component={CreateModel}/>

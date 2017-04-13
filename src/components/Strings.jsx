@@ -19,7 +19,7 @@ module.exports = {
   choose_image: 'choose your file',
   create_classifier: 'Create a model',
   visual_recognition_tool: 'Speech to Text Tool',
-  api_key: 'API Key',
+  api_key: 'Credentials',
   update_key_button: 'Update credentials',
 
   // Create Classifier

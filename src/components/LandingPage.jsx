@@ -18,13 +18,19 @@ export default class LandingPage extends React.Component {
     setApiKey = (e) => {
         e.preventDefault()
         var self = this
-        var req = request.post('/api/test_key')
+        var req = request.post('/api/test_credentials')
 
-        req.query({ api_key: this.state.key })
+        var username = self.state.key.split(":")[0]
+        var password = self.state.key.split(":")[1]
+
+        req.query({
+            username: username,
+            password: password
+        })
 
         req.end(function(err, res) {
             if (res.body.valid) {
-                self.props.setApiKey(self.state.key)
+                self.props.setCredentials(username, password)
             } else {
                 self.setState({error: 'Invalid api key'})
             }
