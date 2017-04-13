@@ -4,7 +4,6 @@ import { Route, BrowserRouter, IndexRoute } from 'react-router-dom'
 
 import Base from './components/Base'
 import Models from './components/Models'
-import CreateModel from './components/CreateModel'
 import UpdateModel from './components/UpdateModel'
 import CredentialsModal from './components/CredentialsModal'
 import LandingPage from './components/LandingPage'
@@ -48,8 +47,7 @@ class App extends React.Component {
                     <LandingPage setCredentials={this.setCredentials}/> :
                     <Base showModal={this.showModal}>
                         <Route exact path="/" component={Models}/>
-                        <Route exact path="/create_model" component={CreateModel}/>
-                        <Route exact path="/update_model/:classifierID" render={UpdateModel}/>
+                        <Route exact path="/update_model/:customizationID" render={UpdateModel}/>
                         <CredentialsModal
                             visible={this.state.showModal}
                             setCredentials={this.setCredentials}/>

@@ -103,7 +103,19 @@ export default class Models extends React.Component {
     }
 
     onClick = () => {
-        this.props.history.push('/create_classifier')
+        var name = prompt("Please choose a name for your model", "My Custom Model");
+        if (name) {
+            var req = request.post('/api/create_model')
+
+            req.query({ username: localStorage.getItem('username') })
+            req.query({ password: localStorage.getItem('password') })
+
+            req.query({ name: name })
+
+            req.end(function(err, res) {
+                this.props.history.push('/update_model/3a731300-1f0f-11e7-a25c-3515edf602ac')
+            })
+        }
     }
 
     componentDidMount() {
