@@ -53,7 +53,7 @@ export default class ModelDetail extends React.Component {
 
     updateClassifier = (e) => {
         e.preventDefault()
-        this.props.history.push('/update_classifier/'+this.props.classifierID)
+        this.props.history.push('/update_model/'+this.props.classifierID)
     }
 
     onDrop = (files, rejects, onFinished, onProgress) => {

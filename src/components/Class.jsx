@@ -61,10 +61,6 @@ export default class Class extends React.Component {
             }
         }
 
-        var extraPadding = {
-            padding: '44px 0px'
-        }
-
         var error = {
             paddingBottom: '10px',
             textDecoration:'none',
@@ -94,46 +90,26 @@ export default class Class extends React.Component {
         }
 
         return (
-            <div className="grid-item">
-                <div style={this.props.style}>
-                    <TitleCard
-                        maxlength='50'
-                        inputClassName={this.props.inputClassName}
-                        id={this.props.negative ? 'neg' : null}
-                        errors={this.props.errors}
-                        title={this.props.title}
-                        negative={this.props.negative}
-                        fixedTitle={this.props.fixedTitle}
-                        inputStyle={textStyles.header}
-                        placeholder={Strings.class_name}
-                        onChange={this.onTextChange}>
-                        {this.props.negative || this.props.fixedTitle ? null :
-                            <div style={{position: 'relative', width: '100%', minWidth: '100%'}}>
-                                <div style={{position: 'absolute', top: '-43px', right: '0'}}>
-                                    <button className="delete-class" key={this.props.id} style={deleteStyle}
-                                        onClick={this.delete}>
-                                    </button>
-                                </div>
-                            </div>
-                        }
-                        {this.state.error ? <div className='error--create-classifier--dropzone' style={error}>{this.state.error}</div> : null}
-                        <DropButton
-                            className={this.props.dropzoneClassName}
-                            accept={'application/zip, application/x-zip-compressed, multipart/x-zip, application/x-compressed'}
-                            maxSize={100 * 1024 * 1024}
-                            style={extraPadding}
-                            errors={this.props.negative ? false : this.props.errors}
-                            text={Strings.drag_zip}
-                            subtext={Strings.choose_file}
-                            onDrop={this.onDrop}
-                            clear={true}/>
-                        {this.props.negative ?
-                            <Tooltip placement='top' isOpen={this.state.tooltipOpen} delay={{show: 200, hide: 100}} autohide={false} target='neg' toggle={this.toggle}>
-                                <div style={{textAlign: 'left'}}>{Strings.negatives_tooltip}</div>
-                            </Tooltip> :
-                        null}
-                    </TitleCard>
-                </div>
+            <div style={this.props.style}>
+                <TitleCard
+                    maxlength='50'
+                    inputClassName={this.props.inputClassName}
+                    id={this.props.negative ? 'neg' : null}
+                    errors={this.props.errors}
+                    title={this.props.title}
+                    negative={this.props.negative}
+                    fixedTitle={this.props.fixedTitle}
+                    inputStyle={textStyles.header}
+                    placeholder={Strings.class_name}
+                    onChange={this.onTextChange}>
+                    <div style={{position: 'relative', width: '100%', minWidth: '100%'}}>
+                        <div style={{position: 'absolute', top: '-43px', right: '0'}}>
+                            <button className="delete-class" key={this.props.id} style={deleteStyle}
+                                onClick={this.delete}>
+                            </button>
+                        </div>
+                    </div>
+                </TitleCard>
             </div>
         )
     }

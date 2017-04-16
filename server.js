@@ -62,7 +62,24 @@ app.post('/api/test_credentials', function(req, res) {
     .end(function(err, response) {
         res.send({valid: !(err.status == 401)});
     });
-})
+});
+
+app.post('/api/list_words', function(req, res) {
+    var speech_to_text = new SpeechToTextV1 ({
+        username: req.query.username,
+        password: req.query.password
+    });
+
+    var params = req.query;
+
+    speech_to_text.getWords(params, function(err, data) {
+        if (err) {
+            res.send(err);
+            return;
+        }
+        res.send(data);
+	});
+});
 
 app.post('/api/list_models', function(req, res) {
     var speech_to_text = new SpeechToTextV1 ({

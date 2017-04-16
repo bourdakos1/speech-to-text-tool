@@ -47,7 +47,7 @@ class App extends React.Component {
                     <LandingPage setCredentials={this.setCredentials}/> :
                     <Base showModal={this.showModal}>
                         <Route exact path="/" component={Models}/>
-                        <Route exact path="/update_model/:customizationID" render={UpdateModel}/>
+                        <Route exact path="/update_model/:customizationID" component={UpdateModel}/>
                         <CredentialsModal
                             visible={this.state.showModal}
                             setCredentials={this.setCredentials}/>
