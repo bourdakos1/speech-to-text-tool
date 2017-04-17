@@ -7,7 +7,7 @@ import Styles from './Styles'
 import Strings from './Strings'
 import TitleCard from './TitleCard'
 import Button from './Button'
-import Class from './Class'
+import Word from './Word'
 import AddWordModal from './AddWordModal'
 import Base from './Base'
 import DropButton from './DropButton'
@@ -22,12 +22,37 @@ export default class UpdateModel extends React.Component {
         this.state = {
             name: '',
             words: [],
+            filteredWords: [],
             corpora: [],
             addWord: false,
             errors: false,
             search: '',
             corporaFilter: '',
         }
+    }
+
+    filterWords = () => {
+        var self = this
+        var newWords = this.state.words.filter(function(element) {
+            if (self.state.search == '' && self.state.corporaFilter == '') {
+                return true
+            }
+            if (element.source.indexOf(self.state.corporaFilter) > -1) {
+                if (self.state.search == '') {
+                    return true
+                }
+                if (element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
+                    return true
+                }
+            }
+            if (self.state.corporaFilter == '' && element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
+                return true
+            }
+            return false
+        })
+        this.setState({filteredWords: newWords}, () => {
+             this.list.recomputeRowHeights()
+        })
     }
 
     loadWords = () => {
@@ -37,7 +62,6 @@ export default class UpdateModel extends React.Component {
 
         req.query({ username: localStorage.getItem('username') })
         req.query({ password: localStorage.getItem('password') })
-        // req.query({ word_type: 'user' })
         req.query({ customization_id: this.props.match.params.customizationID })
 
         req.end(function(err, res) {
@@ -57,7 +81,9 @@ export default class UpdateModel extends React.Component {
                     wordCount++
                 })
             }
-            self.setState({words: words})
+            self.setState({words: words}, () => {
+                self.filterWords()
+            })
         })
     }
 
@@ -116,38 +142,26 @@ export default class UpdateModel extends React.Component {
     }
 
     rowRenderer = (item) => {
-        var self = this
-        var title = this.state.words.filter(function(element) {
-            if (self.state.search == '' && self.state.corporaFilter == '') {
-                return true
-            }
-            if (element.source.indexOf(self.state.corporaFilter) > -1) {
-                if (self.state.search == '') {
-                    return true
-                }
-                if (element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
-                    return true
-                }
-            }
-            if (self.state.corporaFilter == '' && element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
-                return true
-            }
-            return false
-        })[item.index].word
+        var word = this.state.filteredWords[item.index]
         return (
-            <Class
+            <Word
                 delete={this.deleteWord}
                 style={{margin: '20px'}, item.style}
-                errors={this.state.errors}
-                title={title}
-                fixedTitle={true}
+                word={word}
                 id={item.key}
                 key={item.key}/>
         )
     }
 
+    heightForIndex = (index) => {
+        var word = this.state.filteredWords[index.index]
+        return 83 + (word.soundsLike.length * 21)
+    }
+
     onTextChange = (text) => {
-        this.setState({ search: text.target.value })
+        this.setState({ search: text.target.value }, () => {
+            this.filterWords()
+        })
     }
 
     onDrop = (files, rejects, onFinished, onProgress) => {
@@ -225,18 +239,25 @@ export default class UpdateModel extends React.Component {
     filterUser = () => {
         this.setState({
             corporaFilter: 'user'
+        }, () => {
+            this.filterWords()
         })
     }
 
     filterCorpus = (e) => {
+        console.log(e.target.id)
         this.setState({
             corporaFilter: e.target.id
+        }, () => {
+            this.filterWords()
         })
     }
 
     filterAll = () => {
         this.setState({
             corporaFilter: ''
+        }, () => {
+            this.filterWords()
         })
     }
 
@@ -296,39 +317,14 @@ export default class UpdateModel extends React.Component {
             marginRight: '-22px',
             backgroundColor: '#dedede',
         }
-
         var self = this
-        var items = this.state.words.filter(function(element) {
-            if (self.state.search == '' && self.state.corporaFilter == '') {
-                return true
-            }
-            if (element.source.indexOf(self.state.corporaFilter) > -1) {
-                if (self.state.search == '') {
-                    return true
-                }
-                if (element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
-                    return true
-                }
-            }
-            if (self.state.corporaFilter == '' && element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
-                return true
-            }
-            return false
-        })
         return (
             <div style={{marginTop: '40px', marginBottom: '40px'}}>
-                {/*<div style={[textStyles.header, {marginTop: '30px', marginBottom: '5px'}]}>
-                    {Strings.update_classifier_title}
-                </div>
-                <div style={[textStyles.base, {marginTop: '5px', marginBottom: '18px'}]}>
-                    {Strings.create_classifier_description}
-                </div>*/}
                 <TitleCard
                     containerStyle={{padding: '22px'}}
-                    errors={self.state.errors}
+                    errors={this.state.errors}
                     title={this.state.name}
                     fixedTitle={true}
-                    onChange={this.onTextChange}
                     inputStyle={textStyles.header}>
 
                     <div style={[textStyles.header, {marginTop: '0px', marginBottom: '5px'}]}>
@@ -378,16 +374,17 @@ export default class UpdateModel extends React.Component {
                     })}
                     <button onClick={this.filterAll}>all</button>
 
-                    {self.state.error ? <div style={error}>{self.state.error}</div> : null}
+                    {this.state.error ? <div style={error}>{this.state.error}</div> : null}
                     <AutoSizer disableHeight>
                         {({ width }) => (
                             <List
                                 style={{marginTop: '10px', marginBottom: '40px'}}
                                 width={width}
-                                height={items.length * 80 < 350? items.length * 80: 350}
+                                ref={c => this.list = c}
+                                height={this.state.filteredWords.length * 80 < 350? this.state.filteredWords.length * 80: 350}
                                 overscanRowCount={10}
-                                rowCount={items.length}
-                                rowHeight={80}
+                                rowCount={this.state.filteredWords.length}
+                                rowHeight={this.heightForIndex}
                                 rowRenderer={this.rowRenderer} />
                         )}
                     </AutoSizer>

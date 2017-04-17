@@ -1,6 +1,6 @@
 ---
 applications:
-- name: vr-tool
+- name: speech-to-text-tooling
   buildpack: sdk-for-nodejs
   path: .
   memory: 512M

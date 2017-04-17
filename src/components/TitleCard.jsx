@@ -44,28 +44,9 @@ export default class TitleCard extends React.Component {
 
         return (
             <div id={this.props.id} style={[cardStyle, this.props.style]}>
-                <Style scopeSelector='input::-webkit-contacts-auto-fill-button' rules={{
-                    visibility: 'hidden',
-                    display: 'none !important',
-                    pointerEvents: 'none',
-                    position: 'absolute',
-                    right: '0',
-                }} />
-                {this.props.negative || this.props.fixedTitle ?
-                    this.props.negative ?
-                        <div style={[text.base, this.props.inputStyle]}>
-                            Negative&nbsp;&nbsp;<div style={[optional, {display: 'inline-block'}]}>(Optional)</div>
-                        </div> :
-                        <div style={[text.base, this.props.inputStyle, {wordWrap: 'break-word'}]}>
-                            {this.props.title}
-                        </div>
-                    :
-                    <input type='text' style={[text.base, this.props.inputStyle, this.props.errors && this.props.title == '' ? text.error : null]}
-                        id={this.props.inputId}
-                        className={this.props.inputClassName}
-                        placeholder={this.props.placeholder}
-                        onChange={this.props.onChange} />
-                }
+                <div style={[text.base, this.props.inputStyle, {wordWrap: 'break-word'}]}>
+                    {this.props.title}
+                </div>
                 <div style={[container, this.props.containerStyle]}>
                     {this.props.children}
                 </div>
