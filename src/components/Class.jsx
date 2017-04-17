@@ -49,7 +49,7 @@ export default class Class extends React.Component {
     }
 
     delete = () => {
-        this.props.delete(this.props.id)
+        this.props.delete(this.props.title)
     }
 
     render() {

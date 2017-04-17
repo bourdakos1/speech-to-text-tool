@@ -136,6 +136,7 @@ export default class UpdateModel extends React.Component {
         })[item.index].word
         return (
             <Class
+                delete={this.deleteWord}
                 style={{margin: '20px'}, item.style}
                 errors={this.state.errors}
                 title={title}
@@ -184,6 +185,20 @@ export default class UpdateModel extends React.Component {
         })
     }
 
+    deleteWord = (word) => {
+        var self = this
+        var req = request.post('/api/delete_word')
+
+        req.query({ username: localStorage.getItem('username') })
+        req.query({ password: localStorage.getItem('password') })
+        req.query({ customization_id: this.props.match.params.customizationID })
+        req.query({ word: word })
+
+        req.end(function(err, res) {
+            self.loadWords()
+        })
+    }
+
     cancel = () => {
         this.props.history.push('/')
     }
@@ -210,6 +225,12 @@ export default class UpdateModel extends React.Component {
     filterUser = () => {
         this.setState({
             corporaFilter: 'user'
+        })
+    }
+
+    filterCorpus = (e) => {
+        this.setState({
+            corporaFilter: e.target.id
         })
     }
 
@@ -350,6 +371,11 @@ export default class UpdateModel extends React.Component {
                         placeholder={'search'}
                         onChange={this.onTextChange} />
                     <button onClick={this.filterUser}>user</button>
+                    {this.state.corpora.map(function(corpus) {
+                        return(
+                            <button id={corpus.name} key={corpus.name} onClick={self.filterCorpus}>{corpus.name}</button>
+                        )
+                    })}
                     <button onClick={this.filterAll}>all</button>
 
                     {self.state.error ? <div style={error}>{self.state.error}</div> : null}

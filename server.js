@@ -68,10 +68,25 @@ app.post('/api/add_word', function(req, res) {
     var username = req.query.username;
     var password = req.query.password;
 
-    request.put('https://stream.watsonplatform.net/speech-to-text/api/v1/customizations/' + req.query.customization_id + '/words/' + req.query.word)
+    request.put('https://stream.watsonplatform.net/speech-to-text/api/v1/customizations/' + encodeURIComponent(req.query.customization_id) + '/words/' + encodeURIComponent(req.query.word))
     .auth(username, password)
     .send({sounds_like: req.query.sounds_like})
     .send({display_as: req.query.display_as})
+    .end(function(err, response) {
+        if (err) {
+            res.send(err);
+            return;
+        }
+        res.send(response.body)
+    });
+});
+
+app.post('/api/delete_word', function(req, res) {
+    var username = req.query.username;
+    var password = req.query.password;
+
+    request.del('https://stream.watsonplatform.net/speech-to-text/api/v1/customizations/' + encodeURIComponent(req.query.customization_id) + '/words/' + encodeURIComponent(req.query.word))
+    .auth(username, password)
     .end(function(err, response) {
         if (err) {
             res.send(err);
@@ -85,7 +100,7 @@ app.post('/api/list_words', function(req, res) {
     var username = req.query.username;
     var password = req.query.password;
 
-    request.get('https://stream.watsonplatform.net/speech-to-text/api/v1/customizations/' + req.query.customization_id + '/words')
+    request.get('https://stream.watsonplatform.net/speech-to-text/api/v1/customizations/' + encodeURIComponent(req.query.customization_id) + '/words')
     .auth(username, password)
     .query(req.query)
     .end(function(err, response) {
