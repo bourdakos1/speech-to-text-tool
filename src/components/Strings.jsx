@@ -7,8 +7,8 @@ module.exports = {
   save_key: 'Save credentials',
   mb100_error: 'Size limit (100MB) exceeded',
   invalid_file_error: 'Invalid file (must be .zip)',
-  class_name: 'Class name',
-  drag_zip: 'Drag .zip here to train class',
+  class_name: 'Word',
+  drag_zip: 'Drag a text file here to generate words',
   choose_file: 'choose your file',
   negatives_tooltip: 'Negative examples define what the classifier is not. They should be images that are visually similar to the positive examples, but do not depict any class.',
   mb2_error: 'Image size limit (2MB) exceeded',
@@ -36,9 +36,10 @@ module.exports = {
   classifier_name: 'Classifier name',
   classes: 'Classes',
   classifier_requirements: 'Upload at least 2 classes, each in a zipped file with at least 10 photos.',
-  add_class: 'Add class',
+  add_class: 'Add word',
   cancel: 'Cancel',
   create: 'Create',
+  train: 'Train',
   creating_classifier: 'Creating classifier',
 
   // Drop button
@@ -59,6 +60,6 @@ module.exports = {
 
   // Update Classifier
   modify_class: 'You must modify or add at least one class.',
-  update_classifier: 'Update classifier',
+  update_classifier: 'Update model',
   updating_classifier: 'Updating classifier',
 }

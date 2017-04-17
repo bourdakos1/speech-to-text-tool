@@ -81,6 +81,57 @@ app.post('/api/list_words', function(req, res) {
 	});
 });
 
+app.post('/api/list_corpora', function(req, res) {
+    var speech_to_text = new SpeechToTextV1 ({
+        username: req.query.username,
+        password: req.query.password
+    });
+
+    var params = req.query;
+
+    speech_to_text.getCorpora(params, function(err, data) {
+        if (err) {
+            res.send(err);
+            return;
+        }
+        res.send(data);
+	});
+});
+
+app.post('/api/get_model', function(req, res) {
+    var speech_to_text = new SpeechToTextV1 ({
+        username: req.query.username,
+        password: req.query.password
+    });
+
+    var params = req.query;
+
+    speech_to_text.getCustomization(params, function(err, data) {
+        if (err) {
+            res.send(err);
+            return;
+        }
+        res.send(data);
+	});
+});
+
+app.post('/api/train', function(req, res) {
+    var speech_to_text = new SpeechToTextV1 ({
+        username: req.query.username,
+        password: req.query.password
+    });
+
+    var params = req.query;
+
+    speech_to_text.trainCustomization(params, function(err, data) {
+        if (err) {
+            res.send(err);
+            return;
+        }
+        res.send(data);
+	});
+});
+
 app.post('/api/list_models', function(req, res) {
     var speech_to_text = new SpeechToTextV1 ({
         username: req.query.username,
@@ -213,23 +264,23 @@ app.post('/api/transcribe', function(req, res) {
     });
 });
 
-app.post('/api/detect_faces', function(req, res) {
+app.post('/api/add_corpus', function(req, res) {
     fileUpload(req, res, function (err) {
         if (err) {
             res.send(err);
             return;
         }
 
-        var visual_recognition = new VisualRecognitionV3({
-            api_key: req.query.api_key,
-            version_date: req.query.version || '2016-05-19'
+        var speech_to_text = new SpeechToTextV1 ({
+            username: req.query.username,
+            password: req.query.password
         });
 
         var params = req.query;
 
-        params.images_file = fs.createReadStream(req.file.path);
+        params.corpus = fs.createReadStream(req.file.path);
 
-        visual_recognition.detectFaces(params, function(err, data) {
+        speech_to_text.addCorpus(params, function(err, data) {
             fs.unlinkSync(req.file.path);
             if (err) {
                 res.send(err);

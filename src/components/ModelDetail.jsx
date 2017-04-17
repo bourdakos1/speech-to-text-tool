@@ -180,7 +180,7 @@ export default class ModelDetail extends React.Component {
         var color
         if (this.props.status == 'available') {
             color = '#64dd17'
-        } else if (this.props.status == 'training'  || this.props.status == 'pending'){
+        } else if (this.props.status == 'ready' || this.props.status == 'training'  || this.props.status == 'pending'){
             color = '#ffab00'
         } else {
             color = '#F44336'
@@ -195,7 +195,7 @@ export default class ModelDetail extends React.Component {
 
                 <div style={titleStyle}>{this.props.name}</div>
                 <div style={textStyle}>{this.props.classifierID}</div>
-                <div style={textStyle}><div style={[status, {background: color}]}/>{this.props.status}</div>
+                <div style={textStyle}><div style={[status, {background: color}]}/>{this.props.status == 'ready' ? <span>{'ready for training'}</span> : this.props.status}</div>
 
                 {/*To soothe my pain*/}
                 {this.props.classifierID ? null : <div style={{height: '1em', marginTop: '2px'}}></div>}

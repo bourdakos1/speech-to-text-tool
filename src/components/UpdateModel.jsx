@@ -10,35 +10,38 @@ import Button from './Button'
 import Class from './Class'
 import ProgressModal from './ProgressModal'
 import Base from './Base'
+import DropButton from './DropButton'
 
-var myNum = 1
-var time = 0
+var wordCount = 1
+var corpusCount = 0
 
 @Radium
 export default class UpdateModel extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            classifierName: 'hiya',
-            words: [
-                // {
-                //     word: 'word',
-                //     display: 'display as',
-                //     soundsLike: ['sounds like', 'sounds like'],
-                //     source: [],
-                //     count: 1,
-                //     id: 0
-                // }
+            name: '',
+            pendingWords: [
+                {
+                    word: '',
+                    display: '',
+                    soundsLike: [],
+                    source: [],
+                    count: 1,
+                    id: 0
+                },
             ],
+            words: [],
+            corpora: [],
             errors: false,
             upload: false,
             search: '',
         }
     }
 
-    loadClassifiersFromServer = () => {
+    loadWords = () => {
         var self = this
-        var newWords = $.extend([], this.state.words)
+        var words = []
         var req = request.post('/api/list_words')
 
         req.query({ username: localStorage.getItem('username') })
@@ -51,42 +54,92 @@ export default class UpdateModel extends React.Component {
             }
             if (res.body != null) {
                 res.body.words.map(function(c) {
-                    newWords.push({
+                    words.push({
                         word: c.word,
                         display: c.display_as,
                         soundsLike: c.sounds_like,
                         source: c.source,
                         count: c.count,
-                        id: myNum
+                        id: wordCount
                     })
-                    myNum++
+                    wordCount++
                 })
             }
-            self.setState({words: newWords})
+            self.setState({words: words})
+        })
+    }
+
+    loadCorpora = () => {
+        var self = this
+        var corpora = []
+        var req = request.post('/api/list_corpora')
+
+        req.query({ username: localStorage.getItem('username') })
+        req.query({ password: localStorage.getItem('password') })
+        req.query({ customization_id: this.props.match.params.customizationID })
+
+        req.end(function(err, res) {
+            if (err != null) {
+                console.error('Server error')
+            }
+            if (res.body != null) {
+                res.body.corpora.map(function(c) {
+                    corpora.push({
+                        name: c.name,
+                        outOfVocabularyWords: c.out_of_vocabulary_words,
+                        totalWords: c.total_words,
+                        status: c.status,
+                        id: corpusCount
+                    })
+                    corpusCount++
+                })
+            }
+            self.setState({corpora: corpora})
+        })
+    }
+
+    loadDetails = () => {
+        var self = this
+        var req = request.post('/api/get_model')
+
+        req.query({ username: localStorage.getItem('username') })
+        req.query({ password: localStorage.getItem('password') })
+        req.query({ customization_id: this.props.match.params.customizationID })
+
+        req.end(function(err, res) {
+            if (err != null) {
+                console.error('Server error')
+            }
+            if (res.body != null) {
+                self.setState({name: res.body.name})
+            }
         })
     }
 
     componentDidMount() {
-        this.loadClassifiersFromServer()
+        this.loadDetails()
+        this.loadCorpora()
+        this.loadWords()
         this.forceUpdate()
     }
 
     rowRenderer = (item) => {
         var self = this
+        var title = [...this.state.pendingWords, ...this.state.words].filter(function(element) {
+            if (self.state.search == '') {
+                return true
+            }
+            if (element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
+                return true
+            }
+            return false
+        })[item.index].word
         return (
             <Class
                 style={{margin: '20px'}, item.style}
                 errors={this.state.errors}
-                title={this.state.words.filter(function(element) {
-                    if (self.state.search == '') {
-                        return true
-                    }
-                    if (element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
-                        return true
-                    }
-                    return false
-                })[item.index].word}
-                fixedTitle={true}
+                title={title}
+                fixedTitle={title != ''}
                 id={item.key}
                 key={item.key}/>
         )
@@ -96,156 +149,77 @@ export default class UpdateModel extends React.Component {
         this.setState({ search: text.target.value })
     }
 
+    onDrop = (files, rejects, onFinished, onProgress) => {
+        var self = this
+        var req = request.post('/api/add_corpus')
+        req.query({ username: localStorage.getItem('username') })
+        req.query({ password: localStorage.getItem('password') })
+        req.query({ customization_id: this.props.match.params.customizationID })
+
+        if (files[0]) {
+            req.attach('file', files[0])
+        }
+        req.query({ name: files[0].name })
+
+        req.on('progress', function(e) {
+            console.log(e.direction + ' Percentage done: ' + e.percent)
+            if (e.direction == 'upload') {
+                onProgress(e.percent / 2)
+            } else if (e.direction == 'download') {
+                if (e.percent < 100) {
+                    onProgress(50 + e.percent / 2)
+                }
+            }
+        })
+
+        req.end(function(err, res) {
+            onProgress(100)
+            console.log(res)
+            onFinished()
+            if (res.body.error != null) {
+                alert(res.body.error)
+            }
+            self.loadCorpora()
+            self.loadWords()
+        })
+    }
+
     cancel = () => {
         this.props.history.push('/')
     }
 
-    //
-    // setClassFile = (file, key) => {
-    //     var newClasses = $.extend([], this.state.classes)
-    //     newClasses[key].file = file
-    //     this.setState({ classes: newClasses })
-    // }
-    //
-    // setClassName = (text, key) => {
-    //     var newClasses = $.extend([], this.state.classes)
-    //     newClasses[key].name = text.target.value
-    //     this.setState({ classes: newClasses })
-    // }
-    //
-    // deleteClass = (key) => {
-    //     var newClasses = $.extend([], this.state.classes)
-    //     newClasses.splice(key, 1)
-    //     this.setState({classes: newClasses})
-    // }
-    //
-    // errorCheck = () => {
-    //     var self = this
-    //     self.setState({errors: false, error: null}, function() {
-    //         var errors = this.state.errors
-    //         var validClasses = 0
-    //
-    //         var totalbytes = 0
-    //         this.state.classes.map(function(c) {
-    //             if (c.file != null) {
-    //                 totalbytes += c.file[0].size
-    //             }
-    //
-    //             if (c.negative || c.defaultClass) {
-    //                  if (c.file != null) {
-    //                      validClasses++
-    //                  }
-    //                  return
-    //             }
-    //             if (c.name == null || c.name == '') {
-    //                 errors = true
-    //                 self.setState({errors: errors})
-    //                 return
-    //             }
-    //             if (c.file == null) {
-    //                 errors = true
-    //                 self.setState({errors: errors})
-    //                 return
-    //             }
-    //             validClasses++
-    //         })
-    //
-    //         var error = null
-    //
-    //         var dupes = {}
-    //         var classCount = 0
-    //         this.state.classes.map(function(c) {
-    //             if (c.name != null && c.name != '') {
-    //                 dupes[c.name] = 1
-    //                 classCount++
-    //                 if (/[*\\|{}$/'`"\-]/.test(c.name)) {
-    //                     errors = true
-    //                     var invalidChars = c.name.match(/[*\\|{}$/'`"\-]/g)
-    //                     error = Strings.invalid_chars_error + invalidChars.join(' ')
-    //                     self.setState({errors: errors, error: error})
-    //                 }
-    //             }
-    //         })
-    //         console.log(Object.keys(dupes).length + ' / ' + classCount)
-    //         if (Object.keys(dupes).length < classCount) {
-    //             errors = true
-    //             error = Strings.conflicting_class_name_error
-    //             self.setState({errors: errors, error: error})
-    //             return
-    //         }
-    //
-    //         console.log('total size: ' + totalbytes / (1000 * 1000) + 'MB')
-    //         console.log('valid: ' + validClasses)
-    //
-    //         if (totalbytes / (1000 * 1000) > 256) {
-    //             errors = true
-    //             error = Strings.mb250_error
-    //             self.setState({errors: errors, error: error})
-    //             return
-    //         }
-    //
-    //         if (validClasses < 1) {
-    //             errors = true
-    //             error = Strings.modify_class
-    //             self.setState({errors: errors})
-    //             return
-    //         }
-    //
-    //         if (!errors) {
-    //             self.setState({upload: true})
-    //         }
-    //     })
-    // }
-    //
-    // // This is kind of messy but helps show progress faster
-    // create = (onProgress, onFinished) => {
-    //     var req = request.post('/api/update_classifier')
-    //     var self = this
-    //
-    //     this.state.classes.map(function(c) {
-    //         if (c.file != null) {
-    //             name = c.name
-    //             if (c.negative) {
-    //                 name = 'NEGATIVE_EXAMPLES'
-    //             }
-    //             req.attach('files', c.file[0], name)
-    //         }
-    //     })
-    //
-    //     req.query({ api_key: localStorage.getItem('apiKey') })
-    //
-    //     req.query({ classifier_id: this.props.match.params.classifierID })
-    //
-    //     req.on('progress', function(e) {
-    //         if (e.direction == 'upload') {
-    //             console.log(e.percent)
-    //             onProgress(e.percent)
-    //         }
-    //     })
-    //
-    //     req.then(function(res, err) {
-    //         console.log(res)
-    //         if (res.body == null) {
-    //             alert(Strings.generic_error);
-    //         } else if (res.body.error != null) {
-    //             alert(res.body.error);
-    //         }
-    //         onFinished()
-    //         self.setState({upload: false})
-    //         self.props.history.push('/')
-    //     })
-    // }
-    //
-    // addClass = (e) => {
-    //   var newClasses = $.extend([], this.state.classes)
-    //   newClasses.push({
-    //     name: "",
-    //     file: null,
-    //     id: myNum
-    //   })
-    //   myNum++
-    //   this.setState({classes: newClasses})
-    // }
+    train = (onProgress, onFinished) => {
+        var req = request.post('/api/train')
+        var self = this
+
+        req.query({ username: localStorage.getItem('username') })
+        req.query({ password: localStorage.getItem('password') })
+        req.query({ customization_id: this.props.match.params.customizationID })
+
+        req.then(function(res, err) {
+            console.log(res)
+            if (res.body == null) {
+                alert(Strings.generic_error);
+            } else if (res.body.error != null) {
+                alert(res.body.error);
+            }
+            self.props.history.push('/')
+        })
+    }
+
+    addWord = (e) => {
+      var newWords = $.extend([], this.state.pendingWords)
+      newWords.unshift({
+          word: '',
+          display: '',
+          soundsLike: [],
+          source: [],
+          count: 1,
+          id: wordCount
+      })
+      wordCount++
+      this.setState({pendingWords: newWords})
+    }
 
     render() {
         var textStyles = {
@@ -275,22 +249,79 @@ export default class UpdateModel extends React.Component {
             font: Styles.fontDefault,
         }
 
+        var extraPadding = {
+            padding: '44px 0',
+        }
+
+        var divider = {
+            marginTop: '33px',
+            height: '1px',
+            width: 'auto',
+            marginLeft: '-22px',
+            marginRight: '-22px',
+            backgroundColor: '#dedede',
+        }
+
         var self = this
+        var items = [...this.state.pendingWords, ...this.state.words].filter(function(element) {
+            if (self.state.search == '') {
+                return true
+            }
+            if (element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
+                return true
+            }
+            return false
+        })
         return (
-            <div>
-                <div style={[textStyles.header, {marginTop: '30px', marginBottom: '5px'}]}>
-                    {Strings.update_classifier}
+            <div style={{marginTop: '40px', marginBottom: '40px'}}>
+                {/*<div style={[textStyles.header, {marginTop: '30px', marginBottom: '5px'}]}>
+                    {Strings.update_classifier_title}
                 </div>
                 <div style={[textStyles.base, {marginTop: '5px', marginBottom: '18px'}]}>
                     {Strings.create_classifier_description}
-                </div>
+                </div>*/}
                 <TitleCard
+                    containerStyle={{padding: '22px'}}
                     errors={self.state.errors}
-                    placeholder='Classifier name'
-                    title={self.state.classifierName}
+                    title={this.state.name}
                     fixedTitle={true}
                     onChange={this.onTextChange}
                     inputStyle={textStyles.header}>
+
+                    <div style={[textStyles.header, {marginTop: '0px', marginBottom: '5px'}]}>
+                        Corpora
+                    </div>
+                    <div style={[textStyles.base, {marginTop: '0px', marginBottom: '30px'}]}>
+                        You can upload a corpus and speech to text will extract new words within context.
+                    </div>
+
+                    <DropButton
+                        maxSize={200 * 1024 * 1024}
+                        dropzoneStyle={extraPadding}
+                        accept={'text/plain'}
+                        upload={true}
+                        clip={{maxWidth: '500px'}}
+                        errors={this.props.negative ? false : this.props.errors}
+                        text={Strings.drag_zip}
+                        subtext={Strings.choose_file}
+                        onDrop={this.onDrop}/>
+
+                    <div>
+                        {this.state.corpora.map(function(corpus) {
+                            return(
+                                <div key={corpus.id}>{corpus.name} : {corpus.status}</div>
+                            )
+                        })}
+                    </div>
+
+                    <div style={divider}></div>
+
+                    <div style={[textStyles.header, {marginTop: '30px', marginBottom: '5px'}]}>
+                        Words
+                    </div>
+                    <div style={[textStyles.base, {marginTop: '0px', marginBottom: '30px'}]}>
+                        Sounds like are variations of how people can pronounce the words.
+                    </div>
 
                     <input type='text'
                         id={'638tq7dhiuowiju8qw'}
@@ -303,26 +334,18 @@ export default class UpdateModel extends React.Component {
                             <List
                                 style={{marginTop: '10px', marginBottom: '40px'}}
                                 width={width}
-                                height={350}
+                                height={items.length * 80 < 350? items.length * 80: 350}
                                 overscanRowCount={10}
-                                rowCount={this.state.words.filter(function(element) {
-                                    if (self.state.search == '') {
-                                        return true
-                                    }
-                                    if (element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
-                                        return true
-                                    }
-                                    return false
-                                }).length}
+                                rowCount={items.length}
                                 rowHeight={80}
                                 rowRenderer={this.rowRenderer} />
                         )}
                     </AutoSizer>
 
                     <div style={{textAlign: 'right'}}>
-                        <Button onClick={this.addClass} text={Strings.add_class} style={{float: 'left'}}/>
+                        <Button onClick={this.addWord} text={Strings.add_class} style={{float: 'left'}}/>
                         <Button onClick={this.cancel} text={Strings.cancel} style={{marginRight: '20px'}}/>
-                        <Button onClick={this.errorCheck} text={Strings.update} kind='bold'/>
+                        <Button onClick={this.train} text={Strings.train} kind='bold'/>
                     </div>
                 </TitleCard>
                 {this.state.upload ?

@@ -66,7 +66,7 @@ export default class TitleCard extends React.Component {
                         placeholder={this.props.placeholder}
                         onChange={this.props.onChange} />
                 }
-                <div style={container}>
+                <div style={[container, this.props.containerStyle]}>
                     {this.props.children}
                 </div>
             </div>

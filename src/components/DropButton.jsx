@@ -161,7 +161,7 @@ export default class DropButton extends React.Component {
             };
         }
 
-        dropzoneStyle = Object.assign(dropzoneStyle, this.props.style)
+        dropzoneStyle = Object.assign(dropzoneStyle, this.props.dropzoneStyle)
 
         if (this.props.errors && this.state.files.length == 0) {
             dropzoneStyle = Object.assign(dropzoneStyle, {
@@ -284,7 +284,7 @@ export default class DropButton extends React.Component {
                             {this.state.files.map((file) => <div key={file.name} style={[containerStyles.base, containerStyles.image]}><img style={imgStyle} src={file.preview}/></div> )}
                             {this.props.upload ?
                                 <div id="loading-ellipsis" style={[textStyles.base, textStyles.uploading]}>
-                                    <div style={textStyles.clip}>{Strings.uploading + this.state.files[this.state.files.length - 1].name}</div>
+                                    <div style={[textStyles.clip, this.props.clip]}>{Strings.uploading + this.state.files[this.state.files.length - 1].name}</div>
                                     <StyleRoot>
                                         <span style={dot}>.</span>
                                         <span style={[dot, two]}>.</span>
