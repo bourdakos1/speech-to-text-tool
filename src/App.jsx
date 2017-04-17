@@ -15,7 +15,9 @@ import LandingPage from './components/LandingPage'
 class App extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {showModal: false}
+        this.state = {
+            showModal: false
+        }
     }
 
     // Our two points of entry (CredentialsModal/LandingPage) should give us
@@ -50,7 +52,8 @@ class App extends React.Component {
                         <Route exact path="/update_model/:customizationID" component={UpdateModel}/>
                         <CredentialsModal
                             visible={this.state.showModal}
-                            setCredentials={this.setCredentials}/>
+                            setCredentials={this.setCredentials}
+                            onHidden={this.hideModal}/>
                     </Base>
                 }
             </BrowserRouter>

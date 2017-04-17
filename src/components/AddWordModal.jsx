@@ -9,7 +9,7 @@ import Styles from './Styles'
 import Strings from './Strings'
 
 @Radium
-export default class CredentialsModal extends React.Component {
+export default class AddWordModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,33 +23,14 @@ export default class CredentialsModal extends React.Component {
         })
     }
 
-    saveApiKey = (e) => {
-        e.preventDefault()
-        var self = this
-        var username = ReactDOM.findDOMNode(this.refs.username).value
-        var password = ReactDOM.findDOMNode(this.refs.password).value
-
-        var req = request.post('/api/test_credentials')
-
-        req.query({
-            username: username,
-            password: password
-         })
-
-        req.end(function(err, res) {
-            if (res.body.valid) {
-                this.toggle()
-                self.props.setCredentials(username, password)
-            } else {
-                self.setState({error: Strings.invalid_key})
-            }
-        })
-    }
-
-    logout = (e) => {
+    cancel = (e) => {
         e.preventDefault()
         this.toggle()
-        this.props.setCredentials('', '')
+    }
+
+    add = (e) => {
+        e.preventDefault()
+        this.toggle()
     }
 
     toggle = () => {
@@ -88,33 +69,31 @@ export default class CredentialsModal extends React.Component {
         return (
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
                 <div className="modal-header">
-                    <div style={{font: Styles.fontTitle, color: Styles.colorTextDark, display: 'inline-block'}}>{Strings.update_key}</div>
+                    <div style={{font: Styles.fontTitle, color: Styles.colorTextDark, display: 'inline-block'}}>{'Add word'}</div>
                     <button onClick={this.toggle} style={deleteStyle} />
                 </div>
                 <ModalBody>
                     <p>{Strings.key_modal_description}</p>
-                    <p><a href='https://console.ng.bluemix.net/catalog/services/speech-to-text/' target='_blank'>{Strings.sign_up}</a></p>
                     {this.state.error ? <p id='error--api-key-modal--api-key' style={error}>{this.state.error}</p> : null}
                     <form id="api-key-form" role="form" action="#">
                         <div className={this.state.error ? "form-group has-danger" : "form-group"}>
                             <input
                                 style={{marginBottom: '12px'}}
-                                id='input--api-key-modal--api-key'
                                 ref="username"
                                 className="form-control"
-                                type="text"
-                                placeholder="username"/>
+                                type="word"
+                                placeholder="word"/>
                             <input
-                                ref="password"
+                                ref="sounds_like"
                                 className="form-control"
                                 type="text"
-                                placeholder="password"/>
+                                placeholder="sounds like"/>
                         </div>
                     </form>
                 </ModalBody>
                 <ModalFooter style={{textAlign: 'right'}}>
-                    <Button id='button--api-key-modal--logout' onClick={this.logout} text={Strings.log_out} style={{marginRight: '20px'}}/>
-                    <Button id='button--api-key-modal--submit' onClick={this.saveApiKey} kind={"bold"} text={Strings.save_key}/>
+                    <Button onClick={this.cancel} text={'cancel'} style={{marginRight: '20px'}}/>
+                    <Button onClick={this.add} kind={"bold"} text={'add'}/>
                 </ModalFooter>
             </Modal>
         )

@@ -8,7 +8,7 @@ import Strings from './Strings'
 import TitleCard from './TitleCard'
 import Button from './Button'
 import Class from './Class'
-import ProgressModal from './ProgressModal'
+import AddWordModal from './AddWordModal'
 import Base from './Base'
 import DropButton from './DropButton'
 
@@ -22,19 +22,11 @@ export default class UpdateModel extends React.Component {
         this.state = {
             name: '',
             pendingWords: [
-                {
-                    word: '',
-                    display: '',
-                    soundsLike: [],
-                    source: [],
-                    count: 1,
-                    id: 0
-                },
             ],
             words: [],
             corpora: [],
+            addWord: false,
             errors: false,
-            upload: false,
             search: '',
         }
     }
@@ -139,7 +131,7 @@ export default class UpdateModel extends React.Component {
                 style={{margin: '20px'}, item.style}
                 errors={this.state.errors}
                 title={title}
-                fixedTitle={title != ''}
+                fixedTitle={true}
                 id={item.key}
                 key={item.key}/>
         )
@@ -185,7 +177,10 @@ export default class UpdateModel extends React.Component {
     }
 
     cancel = () => {
-        this.props.history.push('/')
+        var r = confirm('Maybe warn people before cancelling?')
+        if (r == true) {
+            this.props.history.push('/')
+        }
     }
 
     train = (onProgress, onFinished) => {
@@ -207,18 +202,30 @@ export default class UpdateModel extends React.Component {
         })
     }
 
-    addWord = (e) => {
-      var newWords = $.extend([], this.state.pendingWords)
-      newWords.unshift({
-          word: '',
-          display: '',
-          soundsLike: [],
-          source: [],
-          count: 1,
-          id: wordCount
-      })
-      wordCount++
-      this.setState({pendingWords: newWords})
+    showAddWordModal = () => {
+        this.setState({
+            addWord: true
+        })
+    }
+
+    onHidden = () => {
+        this.setState({
+            addWord: false
+        })
+    }
+
+    addWord = (word) => {
+        var newWords = $.extend([], this.state.pendingWords)
+        newWords.unshift({
+            word: word,
+            display: '',
+            soundsLike: [],
+            source: [],
+            count: 1,
+            id: wordCount
+        })
+        wordCount++
+        this.setState({pendingWords: newWords})
     }
 
     render() {
@@ -343,16 +350,12 @@ export default class UpdateModel extends React.Component {
                     </AutoSizer>
 
                     <div style={{textAlign: 'right'}}>
-                        <Button onClick={this.addWord} text={Strings.add_class} style={{float: 'left'}}/>
+                        <Button onClick={this.showAddWordModal} text={Strings.add_class} style={{float: 'left'}}/>
                         <Button onClick={this.cancel} text={Strings.cancel} style={{marginRight: '20px'}}/>
                         <Button onClick={this.train} text={Strings.train} kind='bold'/>
                     </div>
                 </TitleCard>
-                {this.state.upload ?
-                    <ProgressModal
-                        title={Strings.updating_classifier} load={this.create}/>
-                    : null
-                }
+                <AddWordModal visible={this.state.addWord} onHidden={this.onHidden} addWord={this.addWord} />
             </div>
         )
     }
