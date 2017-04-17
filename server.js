@@ -64,21 +64,37 @@ app.post('/api/test_credentials', function(req, res) {
     });
 });
 
-app.post('/api/list_words', function(req, res) {
-    var speech_to_text = new SpeechToTextV1 ({
-        username: req.query.username,
-        password: req.query.password
-    });
+app.post('/api/add_word', function(req, res) {
+    var username = req.query.username;
+    var password = req.query.password;
 
-    var params = req.query;
-
-    speech_to_text.getWords(params, function(err, data) {
+    request.put('https://stream.watsonplatform.net/speech-to-text/api/v1/customizations/' + req.query.customization_id + '/words/' + req.query.word)
+    .auth(username, password)
+    .send({sounds_like: req.query.sounds_like})
+    .send({display_as: req.query.display_as})
+    .end(function(err, response) {
         if (err) {
             res.send(err);
             return;
         }
-        res.send(data);
-	});
+        res.send(response.body)
+    });
+});
+
+app.post('/api/list_words', function(req, res) {
+    var username = req.query.username;
+    var password = req.query.password;
+
+    request.get('https://stream.watsonplatform.net/speech-to-text/api/v1/customizations/' + req.query.customization_id + '/words')
+    .auth(username, password)
+    .query(req.query)
+    .end(function(err, response) {
+        if (err) {
+            res.send(err);
+            return;
+        }
+        res.send(response.body)
+    });
 });
 
 app.post('/api/list_corpora', function(req, res) {

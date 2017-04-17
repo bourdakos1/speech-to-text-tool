@@ -38,7 +38,7 @@ export default class CredentialsModal extends React.Component {
 
         req.end(function(err, res) {
             if (res.body.valid) {
-                this.toggle()
+                self.toggle()
                 self.props.setCredentials(username, password)
             } else {
                 self.setState({error: Strings.invalid_key})

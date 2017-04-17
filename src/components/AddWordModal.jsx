@@ -30,7 +30,27 @@ export default class AddWordModal extends React.Component {
 
     add = (e) => {
         e.preventDefault()
-        this.toggle()
+        var self = this
+        var word = ReactDOM.findDOMNode(this.refs.word).value
+        var sounds_like = ReactDOM.findDOMNode(this.refs.sounds_like).value
+
+        console.log(word)
+        console.log(sounds_like)
+
+        var req = request.post('/api/add_word')
+
+        req.query({ username: localStorage.getItem('username') })
+        req.query({ password: localStorage.getItem('password') })
+        req.query({
+            customization_id: this.props.customizationID,
+            word: word
+        })
+
+        var self = this
+        req.end(function(err, res) {
+            self.props.done()
+            self.toggle()
+        })
     }
 
     toggle = () => {
@@ -79,10 +99,10 @@ export default class AddWordModal extends React.Component {
                         <div className={this.state.error ? "form-group has-danger" : "form-group"}>
                             <input
                                 style={{marginBottom: '12px'}}
-                                ref="username"
+                                ref="word"
                                 className="form-control"
-                                type="word"
-                                placeholder="word"/>
+                                type="text"
+                                placeholder="display as"/>
                             <input
                                 ref="sounds_like"
                                 className="form-control"

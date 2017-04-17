@@ -21,13 +21,12 @@ export default class UpdateModel extends React.Component {
         super(props)
         this.state = {
             name: '',
-            pendingWords: [
-            ],
             words: [],
             corpora: [],
             addWord: false,
             errors: false,
             search: '',
+            corporaFilter: '',
         }
     }
 
@@ -38,6 +37,7 @@ export default class UpdateModel extends React.Component {
 
         req.query({ username: localStorage.getItem('username') })
         req.query({ password: localStorage.getItem('password') })
+        // req.query({ word_type: 'user' })
         req.query({ customization_id: this.props.match.params.customizationID })
 
         req.end(function(err, res) {
@@ -117,11 +117,19 @@ export default class UpdateModel extends React.Component {
 
     rowRenderer = (item) => {
         var self = this
-        var title = [...this.state.pendingWords, ...this.state.words].filter(function(element) {
-            if (self.state.search == '') {
+        var title = this.state.words.filter(function(element) {
+            if (self.state.search == '' && self.state.corporaFilter == '') {
                 return true
             }
-            if (element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
+            if (element.source.indexOf(self.state.corporaFilter) > -1) {
+                if (self.state.search == '') {
+                    return true
+                }
+                if (element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
+                    return true
+                }
+            }
+            if (self.state.corporaFilter == '' && element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
                 return true
             }
             return false
@@ -177,10 +185,7 @@ export default class UpdateModel extends React.Component {
     }
 
     cancel = () => {
-        var r = confirm('Maybe warn people before cancelling?')
-        if (r == true) {
-            this.props.history.push('/')
-        }
+        this.props.history.push('/')
     }
 
     train = (onProgress, onFinished) => {
@@ -202,6 +207,18 @@ export default class UpdateModel extends React.Component {
         })
     }
 
+    filterUser = () => {
+        this.setState({
+            corporaFilter: 'user'
+        })
+    }
+
+    filterAll = () => {
+        this.setState({
+            corporaFilter: ''
+        })
+    }
+
     showAddWordModal = () => {
         this.setState({
             addWord: true
@@ -214,18 +231,8 @@ export default class UpdateModel extends React.Component {
         })
     }
 
-    addWord = (word) => {
-        var newWords = $.extend([], this.state.pendingWords)
-        newWords.unshift({
-            word: word,
-            display: '',
-            soundsLike: [],
-            source: [],
-            count: 1,
-            id: wordCount
-        })
-        wordCount++
-        this.setState({pendingWords: newWords})
+    uploaded = () => {
+        this.loadWords()
     }
 
     render() {
@@ -270,11 +277,19 @@ export default class UpdateModel extends React.Component {
         }
 
         var self = this
-        var items = [...this.state.pendingWords, ...this.state.words].filter(function(element) {
-            if (self.state.search == '') {
+        var items = this.state.words.filter(function(element) {
+            if (self.state.search == '' && self.state.corporaFilter == '') {
                 return true
             }
-            if (element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
+            if (element.source.indexOf(self.state.corporaFilter) > -1) {
+                if (self.state.search == '') {
+                    return true
+                }
+                if (element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
+                    return true
+                }
+            }
+            if (self.state.corporaFilter == '' && element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
                 return true
             }
             return false
@@ -334,6 +349,8 @@ export default class UpdateModel extends React.Component {
                         id={'638tq7dhiuowiju8qw'}
                         placeholder={'search'}
                         onChange={this.onTextChange} />
+                    <button onClick={this.filterUser}>user</button>
+                    <button onClick={this.filterAll}>all</button>
 
                     {self.state.error ? <div style={error}>{self.state.error}</div> : null}
                     <AutoSizer disableHeight>
@@ -355,7 +372,7 @@ export default class UpdateModel extends React.Component {
                         <Button onClick={this.train} text={Strings.train} kind='bold'/>
                     </div>
                 </TitleCard>
-                <AddWordModal visible={this.state.addWord} onHidden={this.onHidden} addWord={this.addWord} />
+                <AddWordModal visible={this.state.addWord} customizationID={this.props.match.params.customizationID} onHidden={this.onHidden} done={this.uploaded} />
             </div>
         )
     }
