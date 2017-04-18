@@ -28,6 +28,7 @@ export default class TitleCard extends React.Component {
                 width: '100%',
                 padding: '10px',
                 paddingRight: '45px',
+                wordWrap: 'break-word',
                 ':focus': {
                     borderBottom: `1px solid ${Styles.colorPrimary}`,
                 }
@@ -44,7 +45,7 @@ export default class TitleCard extends React.Component {
 
         return (
             <div id={this.props.id} style={[cardStyle, this.props.style]}>
-                <div style={[text.base, this.props.inputStyle, {wordWrap: 'break-word'}]}>
+                <div style={[text.base, this.props.inputStyle]}>
                     {this.props.title}
                 </div>
                 <div style={[container, this.props.containerStyle]}>
