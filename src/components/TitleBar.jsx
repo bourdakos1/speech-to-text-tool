@@ -9,15 +9,6 @@ import Strings from './Strings'
 @Radium
 export default class TitleBar extends React.Component {
     render() {
-        var filter = {
-            position: 'absolute',
-            background: Styles.colorPrimary,
-            mixBlendMode: 'screen',
-            width: '60px',
-            height: '60px',
-            float: 'left',
-        }
-
         var logo = {
             height: '60px',
             float: 'left',
@@ -26,14 +17,19 @@ export default class TitleBar extends React.Component {
         var title = {
             font: Styles.fontTitle,
             color: Styles.colorTextDark,
+            flex: 'none',
+            marginRight: 'auto',
         }
 
         var right = {
             font: Styles.fontDefault,
             color: Styles.colorTextLight,
+            minWidth: '0px',
+            marginLeft: '20px',
+            display: 'flex',
         }
 
-        var shadowWrapper = {
+        var shadow = {
             zIndex: '1000',
             boxShadow: '0 1px 1px rgba(0, 0, 0, 0.1)',
             position: 'fixed',
@@ -54,24 +50,34 @@ export default class TitleBar extends React.Component {
             alignItems: 'center',
         }
 
-        return (
-            <div style={shadowWrapper}>
-                <div style={contentWrapper}>
-                    <img src="/watson_color.png" style={logo}></img>
-                    <div style={[title, {flex: 'none', marginRight: 'auto'}]}>{Strings.visual_recognition_tool}</div>
+        var user = {
+            whiteSpace:'nowrap',
+            overflow:'hidden',
+            textOverflow:'ellipsis',
+        }
 
-                    <div style={[right, {
-                            minWidth: '0px',
-                            marginLeft: '20px',
-                            display: 'flex'}]}>
-                            <div style={{
-                                    whiteSpace:'nowrap',
-                                    overflow:'hidden',
-                                    textOverflow:'ellipsis'}}>
-                                User: {localStorage.getItem('username') || "Unknown"} &nbsp;&nbsp;
-                            </div>
+        var button = {
+            display: 'flex',
+            flex: 'none'
+        }
+
+        return (
+            <div style={shadow}>
+                <div style={contentWrapper}>
+                    <img src='/watson_color.png' style={logo}></img>
+                    <div style={title}>{Strings.visual_recognition_tool}</div>
+
+                    <div style={right}>
+                        <div style={user}>
+                            User: {localStorage.getItem('username') || 'Unknown'} &nbsp;&nbsp;
+                        </div>
                     </div>
-                    <Button style={{display: 'flex', flex: 'none'}} id='button--base--update-api-key' onClick={this.props.showModal} text={Strings.update_key_button}/>
+
+                    <Button
+                        style={button}
+                        id='button--base--update-api-key'
+                        onClick={this.props.showModal}
+                        text={Strings.update_key_button}/>
                 </div>
             </div>
         )
