@@ -11,7 +11,7 @@ import Strings from './Strings'
 @Radium
 export default class AddWordModal extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             modal: props.visible,
             soundsLike: []
@@ -64,7 +64,7 @@ export default class AddWordModal extends React.Component {
         req.send({ sounds_like: sounds_like })
 
         var self = this
-        req.end(function(err, res) {
+        req.end((err, res) => {
             self.props.done()
             self.toggle()
         })

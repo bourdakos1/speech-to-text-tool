@@ -28,7 +28,7 @@ export default class LandingPage extends React.Component {
             password: password
         })
 
-        req.end(function(err, res) {
+        req.end((err, res) => {
             if (res.body.valid) {
                 self.props.setCredentials(username, password)
             } else {

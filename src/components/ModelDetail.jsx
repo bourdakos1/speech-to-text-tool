@@ -43,7 +43,7 @@ export default class ModelDetail extends React.Component {
             req.query({customization_id: this.props.customizationID})
             req.query({username: localStorage.getItem('username')})
             req.query({password: localStorage.getItem('password')})
-            req.end(function(err, res) {
+            req.end((err, res) => {
                 if (res.body.error != null) {
                     alert(res.body.error)
                 }
@@ -84,7 +84,7 @@ export default class ModelDetail extends React.Component {
         req.query({username: localStorage.getItem('username')})
         req.query({password: localStorage.getItem('password')})
 
-        req.on('progress', function(e) {
+        req.on('progress', (e) => {
             console.log(e.direction + ' Percentage done: ' + e.percent)
             if (e.direction == 'upload') {
                 onProgress(e.percent / 2)
@@ -95,7 +95,7 @@ export default class ModelDetail extends React.Component {
             }
         })
 
-        req.end(function(err, res) {
+        req.end((err, res) => {
             onProgress(100)
             console.log(res)
             var results = res.body.results[0].alternatives[0].transcript
@@ -108,7 +108,7 @@ export default class ModelDetail extends React.Component {
         const final = this.state.transcript.filter(r => r.results && r.results.length && r.results[0].final)
         const interim = this.state.transcript[this.state.transcript.length - 1]
         if (!(!interim || !interim.results || !interim.results.length || interim.results[0].final)) {
-            final.push(interim);
+            final.push(interim)
         }
 
         var text = ''

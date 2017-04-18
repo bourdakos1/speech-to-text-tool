@@ -42,7 +42,7 @@ export default class Models extends React.Component {
                 alert(res.body.error)
             } else {
                 models = res.body.customizations
-                models.sort(function(a, b) {
+                models.sort((a, b) => {
                     return new Date(b.created) - new Date(a.created)
                 })
                 models.push({name: 'en-US_BroadbandModel', status: 'available'})

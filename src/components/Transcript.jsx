@@ -5,10 +5,6 @@ import { Tooltip } from 'reactstrap'
 import Styles from './Styles'
 import Strings from './Strings'
 
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-}
-
 @Radium
 export default class Transcript extends React.Component {
     render(){

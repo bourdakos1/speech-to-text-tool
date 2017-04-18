@@ -33,7 +33,7 @@ export default class UpdateModel extends React.Component {
 
     filterWords = () => {
         var self = this
-        var newWords = this.state.words.filter(function(element) {
+        var newWords = this.state.words.filter((element) => {
             if (self.state.search == '' && self.state.corporaFilter == '') {
                 return true
             }
@@ -64,12 +64,12 @@ export default class UpdateModel extends React.Component {
         req.query({ password: localStorage.getItem('password') })
         req.query({ customization_id: this.props.match.params.customizationID })
 
-        req.end(function(err, res) {
+        req.end((err, res) => {
             if (err != null) {
                 console.error('Server error')
             }
             if (res.body != null) {
-                res.body.words.map(function(c) {
+                res.body.words.map((c) => {
                     words.push({
                         word: c.word,
                         display: c.display_as,
@@ -96,12 +96,12 @@ export default class UpdateModel extends React.Component {
         req.query({ password: localStorage.getItem('password') })
         req.query({ customization_id: this.props.match.params.customizationID })
 
-        req.end(function(err, res) {
+        req.end((err, res) => {
             if (err != null) {
                 console.error('Server error')
             }
             if (res.body != null) {
-                res.body.corpora.map(function(c) {
+                res.body.corpora.map((c) => {
                     corpora.push({
                         name: c.name,
                         outOfVocabularyWords: c.out_of_vocabulary_words,
@@ -124,7 +124,7 @@ export default class UpdateModel extends React.Component {
         req.query({ password: localStorage.getItem('password') })
         req.query({ customization_id: this.props.match.params.customizationID })
 
-        req.end(function(err, res) {
+        req.end((err, res) => {
             if (err != null) {
                 console.error('Server error')
             }
@@ -176,7 +176,7 @@ export default class UpdateModel extends React.Component {
         }
         req.query({ name: files[0].name })
 
-        req.on('progress', function(e) {
+        req.on('progress', (e) => {
             console.log(e.direction + ' Percentage done: ' + e.percent)
             if (e.direction == 'upload') {
                 onProgress(e.percent / 2)
@@ -187,7 +187,7 @@ export default class UpdateModel extends React.Component {
             }
         })
 
-        req.end(function(err, res) {
+        req.end((err, res) => {
             onProgress(100)
             console.log(res)
             onFinished()
@@ -208,7 +208,7 @@ export default class UpdateModel extends React.Component {
         req.query({ customization_id: this.props.match.params.customizationID })
         req.query({ word: word })
 
-        req.end(function(err, res) {
+        req.end((err, res) => {
             self.loadWords()
         })
     }
@@ -225,7 +225,7 @@ export default class UpdateModel extends React.Component {
         req.query({ password: localStorage.getItem('password') })
         req.query({ customization_id: this.props.match.params.customizationID })
 
-        req.then(function(res, err) {
+        req.then((res, err) => {
             console.log(res)
             if (res.body == null) {
                 alert(Strings.generic_error)
@@ -355,7 +355,7 @@ export default class UpdateModel extends React.Component {
                         onDrop={this.onDrop}/>
 
                     <div>
-                        {this.state.corpora.map(function(corpus) {
+                        {this.state.corpora.map((corpus) => {
                             return(
                                 <div key={corpus.id}>{corpus.name} : {corpus.status}</div>
                             )
@@ -376,7 +376,7 @@ export default class UpdateModel extends React.Component {
                         placeholder={'search'}
                         onChange={this.onTextChange} />
                     <button onClick={this.filterUser}>user</button>
-                    {this.state.corpora.map(function(corpus) {
+                    {this.state.corpora.map((corpus) => {
                         return(
                             <button id={corpus.name} key={corpus.name} onClick={self.filterCorpus}>{corpus.name}</button>
                         )
