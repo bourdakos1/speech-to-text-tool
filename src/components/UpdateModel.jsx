@@ -318,6 +318,12 @@ export default class UpdateModel extends React.Component {
             backgroundColor: '#dedede',
         }
         var self = this
+        var wordSize = 0
+        for (var i = 0; i < 6; i++) {
+            if (this.state.filteredWords[i]) {
+                wordSize += 83 + (this.state.filteredWords[i].soundsLike.length * 21)
+            }
+        }
         return (
             <div style={{marginTop: '40px', marginBottom: '40px'}}>
                 <TitleCard
@@ -381,7 +387,7 @@ export default class UpdateModel extends React.Component {
                                 style={{marginTop: '10px', marginBottom: '40px'}}
                                 width={width}
                                 ref={c => this.list = c}
-                                height={this.state.filteredWords.length * 80 < 350? this.state.filteredWords.length * 80: 350}
+                                height={wordSize < 350? wordSize: 350}
                                 overscanRowCount={10}
                                 rowCount={this.state.filteredWords.length}
                                 rowHeight={this.heightForIndex}
