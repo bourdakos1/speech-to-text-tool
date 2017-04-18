@@ -1,8 +1,6 @@
 const webpack = require('webpack');
 var path = require('path');
 
-process.traceDeprecation = true
-
 module.exports = {
     entry: [
         './src/app'
