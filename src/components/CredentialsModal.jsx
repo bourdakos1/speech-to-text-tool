@@ -11,7 +11,7 @@ import Strings from './Strings'
 @Radium
 export default class CredentialsModal extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             modal: props.visible
         }
@@ -36,7 +36,7 @@ export default class CredentialsModal extends React.Component {
             password: password
          })
 
-        req.end(function(err, res) {
+        req.end((err, res) => {
             if (res.body.valid) {
                 self.toggle()
                 self.props.setCredentials(username, password)
@@ -80,6 +80,12 @@ export default class CredentialsModal extends React.Component {
             }
         }
 
+        var title = {
+            font: Styles.fontTitle,
+            color: Styles.colorTextDark,
+            display: 'inline-block',
+        }
+
         var error = {
             color: '#F44336',
             font: Styles.fontDefault,
@@ -87,34 +93,42 @@ export default class CredentialsModal extends React.Component {
 
         return (
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                <div className="modal-header">
-                    <div style={{font: Styles.fontTitle, color: Styles.colorTextDark, display: 'inline-block'}}>{Strings.update_key}</div>
+                <div className='modal-header'>
+                    <div style={title}>{Strings.update_key}</div>
                     <button onClick={this.toggle} style={deleteStyle} />
                 </div>
                 <ModalBody>
                     <p>{Strings.key_modal_description}</p>
                     <p><a href='https://console.ng.bluemix.net/catalog/services/speech-to-text/' target='_blank'>{Strings.sign_up}</a></p>
                     {this.state.error ? <p id='error--api-key-modal--api-key' style={error}>{this.state.error}</p> : null}
-                    <form id="api-key-form" role="form" action="#">
-                        <div className={this.state.error ? "form-group has-danger" : "form-group"}>
+                    <form id='api-key-form' role='form' action='#'>
+                        <div className={this.state.error ? 'form-group has-danger' : 'form-group'}>
                             <input
                                 style={{marginBottom: '12px'}}
                                 id='input--api-key-modal--api-key'
-                                ref="username"
-                                className="form-control"
-                                type="text"
-                                placeholder="username"/>
+                                ref='username'
+                                className='form-control'
+                                type='text'
+                                placeholder='username'/>
                             <input
-                                ref="password"
-                                className="form-control"
-                                type="text"
-                                placeholder="password"/>
+                                ref='password'
+                                className='form-control'
+                                type='text'
+                                placeholder='password'/>
                         </div>
                     </form>
                 </ModalBody>
                 <ModalFooter style={{textAlign: 'right'}}>
-                    <Button id='button--api-key-modal--logout' onClick={this.logout} text={Strings.log_out} style={{marginRight: '20px'}}/>
-                    <Button id='button--api-key-modal--submit' onClick={this.saveApiKey} kind={"bold"} text={Strings.save_key}/>
+                    <Button
+                        id='button--api-key-modal--logout'
+                        onClick={this.logout}
+                        text={Strings.log_out}
+                        style={{marginRight: '20px'}}/>
+                    <Button
+                        id='button--api-key-modal--submit'
+                        onClick={this.saveApiKey}
+                        kind={'bold'}
+                        text={Strings.save_key}/>
                 </ModalFooter>
             </Modal>
         )
