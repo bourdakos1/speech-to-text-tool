@@ -8,22 +8,22 @@ var request = require('superagent');
 var multer = require('multer');
 var fs = require('fs');
 var crypto = require('crypto');
-var mime = require('mime-types')
-var bodyParser = require('body-parser')
+var mime = require('mime-types');
+var bodyParser = require('body-parser');
 var app = express();
 
 var PORT = process.env.VCAP_APP_PORT || 8080; //bluemix
 
 // using webpack-dev-server and middleware in development environment
 if(process.env.NODE_ENV !== 'production') {
-  var webpackDevMiddleware = require('webpack-dev-middleware');
-  var webpackHotMiddleware = require('webpack-hot-middleware');
-  var webpack = require('webpack');
-  var config = require('./webpack.config');
-  var compiler = webpack(config);
+    var webpackDevMiddleware = require('webpack-dev-middleware');
+    var webpackHotMiddleware = require('webpack-hot-middleware');
+    var webpack = require('webpack');
+    var config = require('./webpack.config');
+    var compiler = webpack(config);
 
-  app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
-  app.use(webpackHotMiddleware(compiler));
+    app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
+    app.use(webpackHotMiddleware(compiler));
 }
 
 app.use(express.static(path.join(__dirname, 'dist')));
@@ -79,7 +79,7 @@ app.post('/api/add_word', function(req, res) {
             res.send(err);
             return;
         }
-        res.send(response.body)
+        res.send(response.body);
     });
 });
 
@@ -94,7 +94,7 @@ app.post('/api/delete_word', function(req, res) {
             res.send(err);
             return;
         }
-        res.send(response.body)
+        res.send(response.body);
     });
 });
 
@@ -110,7 +110,7 @@ app.post('/api/list_words', function(req, res) {
             res.send(err);
             return;
         }
-        res.send(response.body)
+        res.send(response.body);
     });
 });
 
@@ -128,7 +128,7 @@ app.post('/api/list_corpora', function(req, res) {
             return;
         }
         res.send(data);
-	});
+    });
 });
 
 app.post('/api/get_model', function(req, res) {
@@ -145,7 +145,7 @@ app.post('/api/get_model', function(req, res) {
             return;
         }
         res.send(data);
-	});
+    });
 });
 
 app.post('/api/train', function(req, res) {
@@ -162,7 +162,7 @@ app.post('/api/train', function(req, res) {
             return;
         }
         res.send(data);
-	});
+    });
 });
 
 app.post('/api/list_models', function(req, res) {
@@ -177,7 +177,7 @@ app.post('/api/list_models', function(req, res) {
             return;
         }
         res.send(data);
-	});
+    });
 });
 
 app.post('/api/create_model', function(req, res) {
@@ -188,7 +188,7 @@ app.post('/api/create_model', function(req, res) {
 
     var params = req.query;
 
-    params.base_model_name = 'en-US_BroadbandModel'
+    params.base_model_name = 'en-US_BroadbandModel';
 
     speech_to_text.createCustomization(params, function(err, data) {
         if (err) {
@@ -196,7 +196,7 @@ app.post('/api/create_model', function(req, res) {
             return;
         }
         res.send(data);
-	});
+    });
 });
 
 app.post('/api/delete_model', function(req, res) {
@@ -210,24 +210,24 @@ app.post('/api/delete_model', function(req, res) {
             res.send(err);
             return;
         }
-        res.send(response.body)
+        res.send(response.body);
     });
 });
 
 var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, '.tmp/uploads/')
-  },
-  filename: function (req, file, cb) {
-    crypto.pseudoRandomBytes(16, function (err, raw) {
-        var type = file.mimetype;
-        if (type !== 'application/zip' && type !== 'application/x-zip-compressed' && type !== 'multipart/x-zip' && type !== 'application/x-compressed') {
-            cb(null, raw.toString('hex') + Date.now() + '.' + mime.extension(file.mimetype));
-        } else {
-            cb(null, raw.toString('hex') + Date.now() + '.zip');
-        }
-    });
-  }
+    destination: function (req, file, cb) {
+        cb(null, '.tmp/uploads/')
+    },
+    filename: function (req, file, cb) {
+        crypto.pseudoRandomBytes(16, function (err, raw) {
+            var type = file.mimetype;
+            if (type !== 'application/zip' && type !== 'application/x-zip-compressed' && type !== 'multipart/x-zip' && type !== 'application/x-compressed') {
+                cb(null, raw.toString('hex') + Date.now() + '.' + mime.extension(file.mimetype));
+            } else {
+                cb(null, raw.toString('hex') + Date.now() + '.zip');
+            }
+        });
+    }
 });
 
 // Multer config
@@ -241,7 +241,7 @@ const upload = multer({
         // if (type !== 'image/png' && type !== 'image/jpg' && type !== 'image/jpeg') {
         //     cb(new Error('Invalid image type'));
         // } else {
-            cb(null, true);
+        cb(null, true);
         // }
     },
     storage: storage
@@ -256,16 +256,14 @@ app.post('/api/transcribe', function(req, res) {
         }
 
         var speech_to_text = new SpeechToTextV1 ({
-          username: req.query.username,
-          password: req.query.password
+            username: req.query.username,
+            password: req.query.password
         });
 
-        var params = req.query
+        var params = req.query;
 
         params.content_type = 'audio/wav';
         params.continuous = true;
-
-        // var params = req.query;
         params.audio = fs.createReadStream(req.file.path);
 
         console.log(mime.lookup(req.file.path));
@@ -309,12 +307,10 @@ app.post('/api/add_corpus', function(req, res) {
     });
 });
 
-
-
 app.listen(PORT, function(error) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.info("==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.", PORT, PORT);
-  }
+    if (error) {
+        console.error(error);
+    } else {
+        console.info("==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.", PORT, PORT);
+    }
 });
