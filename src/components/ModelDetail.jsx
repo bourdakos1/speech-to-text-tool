@@ -38,13 +38,14 @@ export default class ModelDetail extends React.Component {
     deleteClassifier = (e) => {
         e.preventDefault()
         if (confirm('Delete ' + this.props.name + '?') == true) {
-            var req = request.post('/api/delete_classifier')
+            var req = request.post('/api/delete_model')
             var self = this
-            req.query({classifier_id: this.props.classifierID})
-            req.query({api_key: localStorage.getItem('apiKey')})
+            req.query({customization_id: this.props.customizationID})
+            req.query({username: localStorage.getItem('username')})
+            req.query({password: localStorage.getItem('password')})
             req.end(function(err, res) {
                 if (res.body.error != null) {
-                    alert(res.body.error);
+                    alert(res.body.error)
                 }
                 self.props.history.push('/')
             })
@@ -53,7 +54,7 @@ export default class ModelDetail extends React.Component {
 
     updateClassifier = (e) => {
         e.preventDefault()
-        this.props.history.push('/update_model/'+this.props.classifierID)
+        this.props.history.push('/update_model/'+this.props.customizationID)
     }
 
     onDrop = (files, rejects, onFinished, onProgress) => {
@@ -74,7 +75,7 @@ export default class ModelDetail extends React.Component {
         }
 
         req = request.post('/api/transcribe')
-        req.query({customization_id: this.props.classifierID})
+        req.query({customization_id: this.props.customizationID})
 
         if (files[0]) {
             req.attach('file', files[0])
@@ -188,17 +189,17 @@ export default class ModelDetail extends React.Component {
 
         return(
             <Card style={{maxWidth:'30rem'}}>
-                {this.props.classifierID ?
+                {this.props.customizationID ?
                     <DropDown className='dropdown--classifier-detail' delete={this.deleteClassifier} update={this.updateClassifier}/>:
                     null
                 }
 
                 <div style={titleStyle}>{this.props.name}</div>
-                <div style={textStyle}>{this.props.classifierID}</div>
+                <div style={textStyle}>{this.props.customizationID}</div>
                 <div style={textStyle}><div style={[status, {background: color}]}/>{this.props.status == 'ready' ? <span>{'ready for training'}</span> : this.props.status}</div>
 
                 {/*To soothe my pain*/}
-                {this.props.classifierID ? null : <div style={{height: '1em', marginTop: '2px'}}></div>}
+                {this.props.customizationID ? null : <div style={{height: '1em', marginTop: '2px'}}></div>}
 
                 <div style={{width: '100%', height:'20px'}}></div>
                 {this.state.error ? <div id='error--classifier-detail' style={error}>{this.state.error}</div> : null}
@@ -206,7 +207,7 @@ export default class ModelDetail extends React.Component {
                     {this.props.status == 'available' ?
                         <DropButton
                             style={{flex: '1'}}
-                            id={this.props.classifierID || this.props.name}
+                            id={this.props.customizationID || this.props.name}
                             className='dropzone--classifier-detail'
                             accept={'audio/wav, audio/l16, audio/ogg, audio/flac, .wav, .ogg, .opus, .flac'}
                             maxSize={200 * 1024 * 1024}
@@ -217,17 +218,17 @@ export default class ModelDetail extends React.Component {
                         :
                         <DropButton
                             style={{flex: '1'}}
-                            id={this.props.classifierID || this.props.name}
+                            id={this.props.customizationID || this.props.name}
                             text={Strings.drag_image}
                             subtext={Strings.choose_image}
                             disabled={true}/>
                     }
                     {recognizeMicrophone.isSupported ?
-                        <MicButton clearTransciption={this.clearTransciption} customizationID={this.props.classifierID} onTransciption={this.onTransciption} style={{marginLeft: '12px', width: '48px'}}/> :
+                        <MicButton clearTransciption={this.clearTransciption} customizationID={this.props.customizationID} onTransciption={this.onTransciption} style={{marginLeft: '12px', width: '48px'}}/> :
                         null
                     }
                 </div>
-                {this.state.results ? <Transcript id={this.props.classifierID || this.props.name} clearClassifier={this.clearClassifier} file={this.state.file} results={this.state.results}/> : null}
+                {this.state.results ? <Transcript id={this.props.customizationID || this.props.name} clearClassifier={this.clearClassifier} file={this.state.file} results={this.state.results}/> : null}
             </Card>
         )
     }

@@ -186,7 +186,7 @@ app.post('/api/create_model', function(req, res) {
         password: req.query.password
     });
 
-    var params = req.query
+    var params = req.query;
 
     params.base_model_name = 'en-US_BroadbandModel'
 
@@ -199,34 +199,19 @@ app.post('/api/create_model', function(req, res) {
 	});
 });
 
-app.post('/api/delete_classifier', function(req, res) {
-    var visual_recognition = new VisualRecognitionV3({
-        api_key: req.query.api_key,
-        version_date: req.query.version || '2016-05-19'
-    });
+app.post('/api/delete_model', function(req, res) {
+    var username = req.query.username;
+    var password = req.query.password;
 
-    visual_recognition.deleteClassifier({classifier_id: req.query.classifier_id }, function(err, data) {
+    request.del('https://stream.watsonplatform.net/speech-to-text/api/v1/customizations/' + encodeURIComponent(req.query.customization_id))
+    .auth(username, password)
+    .end(function(err, response) {
         if (err) {
             res.send(err);
             return;
         }
-        res.send(data);
+        res.send(response.body)
     });
-});
-
-app.post('/api/classifier_details', function(req, res) {
-    var visual_recognition = new VisualRecognitionV3({
-        api_key: req.query.api_key,
-        version_date: req.query.version || '2016-05-19'
-    });
-
-    visual_recognition.getClassifier({classifier_id: req.query.classifier_id }, function(err, data) {
-        if (err) {
-            res.send(err);
-            return;
-        }
-        res.send(data);
-	});
 });
 
 var storage = multer.diskStorage({
@@ -324,97 +309,7 @@ app.post('/api/add_corpus', function(req, res) {
     });
 });
 
-const zipUpload = multer({
-    limits: {
-        fileSize: 100 * 1024 * 1024 // 100mb
-    },
-    fileFilter: function(req, file, cb) {
-        var type = file.mimetype;
-        if (type !== 'application/zip' && type !== 'application/x-zip-compressed' && type !== 'multipart/x-zip' && type !== 'application/x-compressed') {
-            cb(new Error('Invalid zip file'));
-        } else {
-            cb(null, true);
-        }
-    },
-    storage: storage
-});
 
-var filesUpload = zipUpload.array('files')
-app.post('/api/create_classifier', function(req, res) {
-    filesUpload(req, res, function (err) {
-        if (err) {
-            res.send(err);
-            return;
-        }
-
-        var visual_recognition = new VisualRecognitionV3({
-            api_key: req.query.api_key,
-            version_date: req.query.version || '2016-05-19'
-        });
-
-        var params = {
-            name: req.query.name
-        }
-
-        for (var file in req.files) {
-            console.log(req.files[file])
-            if (req.files[file].originalname == 'NEGATIVE_EXAMPLES') {
-                params['negative_examples'] = fs.createReadStream(req.files[file].path);
-            } else {
-                params[req.files[file].originalname + '_positive_examples'] = fs.createReadStream(req.files[file].path);
-            }
-        }
-
-        visual_recognition.createClassifier(params, function(err, data) {
-            for (var file in req.files) {
-                fs.unlinkSync(req.files[file].path);
-            }
-            if (err) {
-                res.send(err);
-                return;
-            }
-            res.send(data);
-        });
-    });
-});
-
-app.post('/api/update_classifier', function(req, res) {
-    filesUpload(req, res, function (err) {
-        if (err) {
-            res.send(err);
-            return;
-        }
-
-        var visual_recognition = new VisualRecognitionV3({
-            api_key: req.query.api_key,
-            version_date: req.query.version || '2016-05-19'
-        });
-
-        var params = {
-            classifier_id: req.query.classifier_id
-        }
-
-        for (var file in req.files) {
-            console.log(req.files[file])
-            if (req.files[file].originalname == 'NEGATIVE_EXAMPLES') {
-                params['negative_examples'] = fs.createReadStream(req.files[file].path);
-            } else {
-                params[req.files[file].originalname + '_positive_examples'] = fs.createReadStream(req.files[file].path);
-            }
-        }
-
-        visual_recognition.retrainClassifier(params, function(err, data) {
-            for (var file in req.files) {
-                fs.unlinkSync(req.files[file].path);
-            }
-            if (err) {
-                res.send(err);
-                return;
-            }
-            res.send(data);
-        });
-    });
-});
 
 app.listen(PORT, function(error) {
   if (error) {

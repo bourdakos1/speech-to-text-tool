@@ -139,7 +139,7 @@ export default class Models extends React.Component {
             return (
                 <ModelDetail
                     history={self.props.history}
-                    classifierID={classifier.customization_id}
+                    customizationID={classifier.customization_id}
                     name={classifier.name}
                     status={classifier.status}
                     reDraw={self.reDraw}

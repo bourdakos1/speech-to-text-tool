@@ -228,9 +228,11 @@ export default class UpdateModel extends React.Component {
         req.then(function(res, err) {
             console.log(res)
             if (res.body == null) {
-                alert(Strings.generic_error);
+                alert(Strings.generic_error)
+                return
             } else if (res.body.error != null) {
-                alert(res.body.error);
+                alert(res.body.error)
+                return
             }
             self.props.history.push('/')
         })
@@ -317,7 +319,7 @@ export default class UpdateModel extends React.Component {
             marginRight: '-22px',
             backgroundColor: '#dedede',
         }
-        
+
         var self = this
         var wordSize = 0
         for (var i = 0; i < 6; i++) {
