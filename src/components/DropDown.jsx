@@ -14,7 +14,6 @@ export default class DropDown extends React.Component {
         this.setState({hover: true})
     }
 
-
     render() {
         var dropbtn = {
             backgroundImage: `url(${'/btn_dropdown.png'})`,
