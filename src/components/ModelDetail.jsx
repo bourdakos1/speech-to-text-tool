@@ -190,7 +190,7 @@ export default class ModelDetail extends React.Component {
         return(
             <Card style={{maxWidth:'30rem'}}>
                 {this.props.customizationID ?
-                    <DropDown className='dropdown--classifier-detail' delete={this.deleteClassifier} update={this.updateClassifier}/>:
+                    <DropDown className={'dropdown--classifier-detail'} delete={this.deleteClassifier} update={this.updateClassifier}/>:
                     null
                 }
 
@@ -202,13 +202,13 @@ export default class ModelDetail extends React.Component {
                 {this.props.customizationID ? null : <div style={{height: '1em', marginTop: '2px'}}></div>}
 
                 <div style={{width: '100%', height:'20px'}}></div>
-                {this.state.error ? <div id='error--classifier-detail' style={error}>{this.state.error}</div> : null}
+                {this.state.error ? <div id={'error--classifier-detail'} style={error}>{this.state.error}</div> : null}
                 <div style={{width: '100%', display:'flex'}}>
                     {this.props.status == 'available' ?
                         <DropButton
                             style={{flex: '1'}}
                             id={this.props.customizationID || this.props.name}
-                            className='dropzone--classifier-detail'
+                            className={'dropzone--classifier-detail'}
                             accept={'audio/wav, audio/l16, audio/ogg, audio/flac, .wav, .ogg, .opus, .flac'}
                             maxSize={200 * 1024 * 1024}
                             upload={true}

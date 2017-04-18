@@ -197,9 +197,9 @@ export default class LandingPage extends React.Component {
             backgroundPosition: 'bottom',
         }
 
-        const RGB=Styles.colorPrimary
-        var A='0.8'
-        var RGBA='rgba('+parseInt(RGB.substring(1,3),16)+','+parseInt(RGB.substring(3,5),16)+','+parseInt(RGB.substring(5,7),16)+','+A+')'
+        const RGB = Styles.colorPrimary
+        var A = '0.8'
+        var RGBA = 'rgba('+parseInt(RGB.substring(1,3),16)+','+parseInt(RGB.substring(3,5),16)+','+parseInt(RGB.substring(5,7),16)+','+A+')'
 
         var skrim = {
             position: 'fixed',
@@ -211,8 +211,8 @@ export default class LandingPage extends React.Component {
             transition: 'all 200ms cubic-bezier(0.4, 0.0, 0.2, 1)',
         }
 
-        var A='0'
-        var RGBA='rgba('+parseInt(RGB.substring(1,3),16)+','+parseInt(RGB.substring(3,5),16)+','+parseInt(RGB.substring(5,7),16)+','+A+')'
+        var A = '0'
+        var RGBA = 'rgba('+parseInt(RGB.substring(1,3),16)+','+parseInt(RGB.substring(3,5),16)+','+parseInt(RGB.substring(5,7),16)+','+A+')'
 
         var skrimNone = {
             position: 'fixed',
@@ -255,55 +255,55 @@ export default class LandingPage extends React.Component {
         }
 
         return(
-            <div id='landing-page' style={background}>
-                <img src="/watson_color.png" style={logo}></img>
+            <div id={'landing-page'} style={background}>
+                <img src={'/watson_color.png'} style={logo}></img>
                 <div style={title}>{Strings.visual_recognition_tool}</div>
                 {this.state.focus ? <div style={skrim}/> : <div style={skrimNone}/>}
-                <Style scopeSelector='.myInputs::-webkit-input-placeholder' rules={{
+                <Style scopeSelector={'.myInputs::-webkit-input-placeholder'} rules={{
                     transition: 'all 200ms cubic-bezier(0.4, 0.0, 0.2, 1)',
                     color: 'white',
                     textAlign: 'center',
                     opacity: '1',
                 }} />
-                <Style scopeSelector='.myInputs:focus::-webkit-input-placeholder' rules={{
+                <Style scopeSelector={'.myInputs:focus::-webkit-input-placeholder'} rules={{
                     transition: 'all 200ms cubic-bezier(0.4, 0.0, 0.2, 1)',
                     opacity: '0',
                 }} />
 
-                <Style scopeSelector='.myInputs::-moz-placeholder' rules={{
+                <Style scopeSelector={'.myInputs::-moz-placeholder'} rules={{
                     transition: 'all 200ms cubic-bezier(0.4, 0.0, 0.2, 1)',
                     color: 'white',
                     textAlign: 'center',
                     opacity: '1',
                 }} />
-                <Style scopeSelector='.myInputs:focus::-moz-placeholder' rules={{
+                <Style scopeSelector={'.myInputs:focus::-moz-placeholder'} rules={{
                     transition: 'all 200ms cubic-bezier(0.4, 0.0, 0.2, 1)',
                     opacity: '0',
                 }} />
 
-                <Style scopeSelector='.myInputs::-ms-input-placeholder' rules={{
+                <Style scopeSelector={'.myInputs::-ms-input-placeholder'} rules={{
                     transition: 'all 200ms cubic-bezier(0.4, 0.0, 0.2, 1)',
                     color: 'white',
                     textAlign: 'center',
                     opacity: '1',
                 }} />
-                <Style scopeSelector='.myInputs:focus::-ms-input-placeholder' rules={{
+                <Style scopeSelector={'.myInputs:focus::-ms-input-placeholder'} rules={{
                     transition: 'all 200ms cubic-bezier(0.4, 0.0, 0.2, 1)',
                     opacity: '0',
                 }} />
-            {this.state.error && this.state.focus ? <div id='error--landing-page--api-key' style={error}>{Strings.invalid_key}</div> : null}
+            {this.state.error && this.state.focus ? <div id={'error--landing-page--api-key'} style={error}>{Strings.invalid_key}</div> : null}
                 <form onSubmit={this.setApiKey}>
-                    <input type='text'
-                        id='input--landing-page--api-key'
-                        className='myInputs'
+                    <input type={'text'}
+                        id={'input--landing-page--api-key'}
+                        className={'myInputs'}
                         onFocus={this.onFocus}
                         onBlur={this.onBlur}
                         style={buttonStyle.base}
                         placeholder={Strings.api_key}
                         onChange={this.onTextChange}/>
-                {this.state.focus ? <button style={pics} id='button--landing-page--api-key' onMouseDown={this.setApiKey}/> : <button style={picsNone}/>}
+                {this.state.focus ? <button style={pics} id={'button--landing-page--api-key'} onMouseDown={this.setApiKey}/> : <button style={picsNone}/>}
                 </form>
-                <div style={getKey}><a id='link--landing-page--api-key' href='https://console.ng.bluemix.net/catalog/services/speech-to-text/' target='_blank' style={link}>{Strings.sign_up}</a></div>
+                <div style={getKey}><a id={'link--landing-page--api-key'} href={'https://console.ng.bluemix.net/catalog/services/speech-to-text/'} target={'_blank'} style={link}>{Strings.sign_up}</a></div>
             </div>
         )
     }

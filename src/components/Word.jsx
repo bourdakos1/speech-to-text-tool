@@ -57,7 +57,7 @@ export default class Word extends React.Component {
                     <div style={{position: 'relative', width: '100%', minWidth: '100%'}}>
                         <div style={{position: 'absolute', top: '-43px', right: '0'}}>
                             <button
-                                className="delete-class"
+                                className={'delete-class'}
                                 key={this.props.id}
                                 style={deleteStyle}
                                 onClick={this.delete}>

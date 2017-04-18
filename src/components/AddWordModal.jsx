@@ -106,30 +106,30 @@ export default class AddWordModal extends React.Component {
 
         return (
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                <div className="modal-header">
+                <div className={'modal-header'}>
                     <div style={{font: Styles.fontTitle, color: Styles.colorTextDark, display: 'inline-block'}}>{'Add word'}</div>
                     <button onClick={this.toggle} style={deleteStyle} />
                 </div>
                 <ModalBody>
                     <p>{Strings.key_modal_description}</p>
-                    {this.state.error ? <p id='error--api-key-modal--api-key' style={error}>{this.state.error}</p> : null}
-                    <form id="api-key-form" role="form" action="#">
+                    {this.state.error ? <p id={'error--api-key-modal--api-key'} style={error}>{this.state.error}</p> : null}
+                    <form id={'api-key-form'} role={'form'} action={'#'}>
                         <div className={this.state.error ? "form-group has-danger" : "form-group"}>
                             <input
                                 style={{marginBottom: '12px'}}
-                                ref='word'
-                                className='form-control'
-                                type='text'
-                                placeholder='word'/>
+                                ref={'word'}
+                                className={'form-control'}
+                                type={'text'}
+                                placeholder={'word'}/>
                             {this.state.soundsLike.map((c, i) => {
                                 return (
                                     <input
                                         style={{marginBottom: '12px'}}
                                         key={i}
                                         ref={'sounds_like' + i}
-                                        className='form-control'
-                                        type='text'
-                                        placeholder='pronunciation'/>
+                                        className={'form-control'}
+                                        type={'text'}
+                                        placeholder={'pronunciation'}/>
                                 )
                             })}
                         </div>

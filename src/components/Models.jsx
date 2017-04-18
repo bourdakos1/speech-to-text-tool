@@ -98,7 +98,7 @@ export default class Models extends React.Component {
             <div>
                 <Button
                     style={{margin: '21px 0px'}}
-                    id='button--classifiers--create'
+                    id={'button--classifiers--create'}
                     text={Strings.create_classifier}
                     kind={'bold'}
                     icon={'/btn_create.png'}

@@ -116,9 +116,9 @@ export default class DropButton extends React.Component {
             textStyles.link.textDecoration = 'none'
         }
 
-        const RGB=Styles.colorPrimary
-        const A='0.2'
-        const RGBA='rgba('+parseInt(RGB.substring(1,3),16)+','+parseInt(RGB.substring(3,5),16)+','+parseInt(RGB.substring(5,7),16)+','+A+')'
+        const RGB = Styles.colorPrimary
+        const A = '0.2'
+        const RGBA = 'rgba('+parseInt(RGB.substring(1,3),16)+','+parseInt(RGB.substring(3,5),16)+','+parseInt(RGB.substring(5,7),16)+','+A+')'
 
 
         // Tempory fix of setting the maxHeight
@@ -262,7 +262,7 @@ export default class DropButton extends React.Component {
                     </div>
                 </div>
                 :
-                <Dropzone ref="dropzone"
+                <Dropzone ref={'dropzone'}
                     className={this.props.className}
                     id={this.props.id}
                     accept={this.props.accept}
@@ -284,7 +284,7 @@ export default class DropButton extends React.Component {
                             }
                             {this.state.files.map((file) => <div key={file.name} style={[containerStyles.base, containerStyles.image]}><img style={imgStyle} src={file.preview}/></div> )}
                             {this.props.upload ?
-                                <div id="loading-ellipsis" style={[textStyles.base, textStyles.uploading]}>
+                                <div id={'loading-ellipsis'} style={[textStyles.base, textStyles.uploading]}>
                                     <div style={[textStyles.clip, this.props.clip]}>{Strings.uploading + this.state.files[this.state.files.length - 1].name}</div>
                                     <StyleRoot>
                                         <span style={dot}>.</span>
@@ -292,7 +292,7 @@ export default class DropButton extends React.Component {
                                         <span style={[dot, three]}>.</span>
                                     </StyleRoot>
                                 </div> :
-                                <div id="loading-ellipsis" style={[textStyles.base, textStyles.uploading]}>
+                                <div id={'loading-ellipsis'} style={[textStyles.base, textStyles.uploading]}>
                                     <div style={textStyles.ellipsis}>{this.state.files[this.state.files.length - 1].name}</div>
                                 </div>
                             }

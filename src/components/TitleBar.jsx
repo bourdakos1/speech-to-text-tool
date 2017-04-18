@@ -64,7 +64,7 @@ export default class TitleBar extends React.Component {
         return (
             <div style={shadow}>
                 <div style={contentWrapper}>
-                    <img src='/watson_color.png' style={logo}></img>
+                    <img src={'/watson_color.png'} style={logo}></img>
                     <div style={title}>{Strings.visual_recognition_tool}</div>
 
                     <div style={right}>
@@ -75,7 +75,7 @@ export default class TitleBar extends React.Component {
 
                     <Button
                         style={button}
-                        id='button--base--update-api-key'
+                        id={'button--base--update-api-key'}
                         onClick={this.props.showModal}
                         text={Strings.update_key_button}/>
                 </div>

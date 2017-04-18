@@ -133,7 +133,7 @@ export default class MicButton extends React.Component {
                 onMouseEnter={this.hover}
                 onMouseLeave={this.clearHover}>
                 <button
-                    id='button--results--clear'
+                    id={'button--results--clear'}
                     style={micButtonStyle} />
             </div>
         )

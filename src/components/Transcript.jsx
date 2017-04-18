@@ -68,7 +68,7 @@ export default class Transcript extends React.Component {
         }
         return (
             <div style={{position: 'relative'}}>
-                <button id='button--results--clear' style={deleteStyle}
+                <button id={'button--results--clear'} style={deleteStyle}
                     onClick={this.props.clearClassifier}>
                 </button>
                 <div style={imgStyle}>
@@ -81,8 +81,8 @@ export default class Transcript extends React.Component {
                 {this.props.results == 'I love the eighties. '?
                     <div style={imgStyle}>
                         <div style={textbox}>
-                            <video width='100%' autoPlay>
-                                <source src='/IBM_Commercial_86.mp4' type='video/mp4'/>
+                            <video width={'100%'} autoPlay>
+                                <source src={'/IBM_Commercial_86.mp4'} type={'video/mp4'}/>
                             </video>
                         </div>
                     </div> :

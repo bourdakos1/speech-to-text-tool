@@ -93,39 +93,39 @@ export default class CredentialsModal extends React.Component {
 
         return (
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                <div className='modal-header'>
+                <div className{'modal-header'}>
                     <div style={title}>{Strings.update_key}</div>
                     <button onClick={this.toggle} style={deleteStyle} />
                 </div>
                 <ModalBody>
                     <p>{Strings.key_modal_description}</p>
-                    <p><a href='https://console.ng.bluemix.net/catalog/services/speech-to-text/' target='_blank'>{Strings.sign_up}</a></p>
-                    {this.state.error ? <p id='error--api-key-modal--api-key' style={error}>{this.state.error}</p> : null}
-                    <form id='api-key-form' role='form' action='#'>
-                        <div className={this.state.error ? 'form-group has-danger' : 'form-group'}>
+                    <p><a href={'https://console.ng.bluemix.net/catalog/services/speech-to-text/'} target={'_blank'}>{Strings.sign_up}</a></p>
+                    {this.state.error ? <p id={'error--api-key-modal--api-key'} style={error}>{this.state.error}</p> : null}
+                    <form id={'api-key-form'} role={'form'} action={'#'}>
+                        <div className={this.state.error ? {'form-group has-danger'} : {'form-group'}}>
                             <input
                                 style={{marginBottom: '12px'}}
-                                id='input--api-key-modal--api-key'
-                                ref='username'
-                                className='form-control'
-                                type='text'
-                                placeholder='username'/>
+                                id={'input--api-key-modal--api-key'}
+                                ref={'username'}
+                                className={'form-control'}
+                                type={'text'}
+                                placeholder={'username'}/>
                             <input
-                                ref='password'
-                                className='form-control'
-                                type='text'
-                                placeholder='password'/>
+                                ref={'password'}
+                                className={'form-control'}
+                                type={'text'}
+                                placeholder={'password'}/>
                         </div>
                     </form>
                 </ModalBody>
                 <ModalFooter style={{textAlign: 'right'}}>
                     <Button
-                        id='button--api-key-modal--logout'
+                        id={'button--api-key-modal--logout'}
                         onClick={this.logout}
                         text={Strings.log_out}
                         style={{marginRight: '20px'}}/>
                     <Button
-                        id='button--api-key-modal--submit'
+                        id={'button--api-key-modal--submit'}
                         onClick={this.saveApiKey}
                         kind={'bold'}
                         text={Strings.save_key}/>

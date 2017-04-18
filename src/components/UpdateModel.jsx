@@ -371,7 +371,8 @@ export default class UpdateModel extends React.Component {
                         Sounds like are variations of how people can pronounce the words.
                     </div>
 
-                    <input type='text'
+                    <input
+                        type={'text'}
                         id={'638tq7dhiuowiju8qw'}
                         placeholder={'search'}
                         onChange={this.onTextChange} />
@@ -401,7 +402,7 @@ export default class UpdateModel extends React.Component {
                     <div style={{textAlign: 'right'}}>
                         <Button onClick={this.showAddWordModal} text={Strings.add_class} style={{float: 'left'}}/>
                         <Button onClick={this.cancel} text={Strings.cancel} style={{marginRight: '20px'}}/>
-                        <Button onClick={this.train} text={Strings.train} kind='bold'/>
+                        <Button onClick={this.train} text={Strings.train} kind={'bold'}/>
                     </div>
                 </TitleCard>
                 <AddWordModal visible={this.state.addWord} customizationID={this.props.match.params.customizationID} onHidden={this.onHidden} done={this.uploaded} />
