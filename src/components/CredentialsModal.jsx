@@ -93,7 +93,7 @@ export default class CredentialsModal extends React.Component {
 
         return (
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                <div className{'modal-header'}>
+                <div className={'modal-header'}>
                     <div style={title}>{Strings.update_key}</div>
                     <button onClick={this.toggle} style={deleteStyle} />
                 </div>
@@ -102,7 +102,7 @@ export default class CredentialsModal extends React.Component {
                     <p><a href={'https://console.ng.bluemix.net/catalog/services/speech-to-text/'} target={'_blank'}>{Strings.sign_up}</a></p>
                     {this.state.error ? <p id={'error--api-key-modal--api-key'} style={error}>{this.state.error}</p> : null}
                     <form id={'api-key-form'} role={'form'} action={'#'}>
-                        <div className={this.state.error ? {'form-group has-danger'} : {'form-group'}}>
+                        <div className={this.state.error ? 'form-group has-danger' : 'form-group'}>
                             <input
                                 style={{marginBottom: '12px'}}
                                 id={'input--api-key-modal--api-key'}
