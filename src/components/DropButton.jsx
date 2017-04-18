@@ -21,16 +21,16 @@ export default class DropButton extends React.Component {
 
     onDrop = (files, rejects) => {
         var self = this
-        this.setState({ files: files }, function() {
-            this.props.onDrop(this.state.files, rejects, function() {
+        this.setState({ files: files }, () => {
+            this.props.onDrop(this.state.files, rejects, () => {
                 self.setState({ files: [] })
-                setTimeout(function() {
+                setTimeout(() => {
                     self.setState({ opacity: 0 })
-                    setTimeout(function() {
+                    setTimeout(() => {
                         self.setState({ progress: 0 })
-                    }, 500);
-                }, 500);
-            }, function(p) {
+                    }, 500)
+                }, 500)
+            }, (p) => {
                 self.setState({ progress: p, opacity: 1 })
             })
         })
@@ -136,30 +136,31 @@ export default class DropButton extends React.Component {
             maxHeight: '135px',
         }
 
-        //////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
         // Polyfill
-        //////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
         if (typeof Object.assign != 'function') {
-            Object.assign = function(target) {
-                'use strict';
+            Object.assign = (target) => {
+                'use strict'
                 if (target == null) {
-                    throw new TypeError('Cannot convert undefined or null to object');
+                    throw new TypeError('Cannot convert undefined or null to object')
                 }
 
-                target = Object(target);
+                target = Object(target)
                 for (var index = 1; index < arguments.length; index++) {
-                    var source = arguments[index];
+                    var source = arguments[index]
                     if (source != null) {
                         for (var key in source) {
                             if (Object.prototype.hasOwnProperty.call(source, key)) {
-                                target[key] = source[key];
+                                target[key] = source[key]
                             }
                         }
                     }
                 }
-                return target;
-            };
+                return target
+            }
         }
+        ////////////////////////////////////////////////////////////////////////
 
         dropzoneStyle = Object.assign(dropzoneStyle, this.props.dropzoneStyle)
 
@@ -209,7 +210,7 @@ export default class DropButton extends React.Component {
             '20%': {opacity: '1'},
             '80%': {opacity: '1'},
             '100%': {opacity: '.2'},
-        }, 'opacity');
+        }, 'opacity')
 
         var dot = {
             animationName: opacityKeyframes,

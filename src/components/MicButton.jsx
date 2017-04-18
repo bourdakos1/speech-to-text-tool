@@ -1,5 +1,5 @@
 import React from 'react'
-import Radium, { StyleRoot } from 'radium'
+import Radium from 'radium'
 import recognizeMicrophone from 'watson-speech/speech-to-text/recognize-microphone'
 import request from 'superagent'
 
@@ -34,7 +34,7 @@ export default class MicButton extends React.Component {
             req.query({username: localStorage.getItem('username')})
             req.query({password: localStorage.getItem('password')})
 
-            req.end(function(err, res) {
+            req.end((err, res) => {
                 if (self.stream) {
                     self.stream.stop()
                     self.stream.removeAllListeners()
@@ -68,11 +68,9 @@ export default class MicButton extends React.Component {
                 self.stream.on('data', (msg) => {
                     self.props.onTransciption(msg)
                 }).on('end', (msg) => {
-                    console.log('end: ' + msg)
                     self.stream && self.stream.stop()
                     self.setState({listening: false})
                 }).on('error', (msg) => {
-                    console.error(msg)
                     self.stream && self.stream.stop()
                     self.setState({listening: false})
                 })
@@ -130,8 +128,13 @@ export default class MicButton extends React.Component {
         }
 
         return (
-            <div style={[micStyle, this.props.style]} onClick={this.startListening} onMouseEnter={this.hover} onMouseLeave={this.clearHover}>
-                <button id='button--results--clear' style={micButtonStyle} />
+            <div style={[micStyle, this.props.style]}
+                onClick={this.startListening}
+                onMouseEnter={this.hover}
+                onMouseLeave={this.clearHover}>
+                <button
+                    id='button--results--clear'
+                    style={micButtonStyle} />
             </div>
         )
     }
