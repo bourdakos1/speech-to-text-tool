@@ -13,13 +13,24 @@ export default class AddWordModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            modal: props.visible
+            modal: props.visible,
+            soundsLike: []
         }
     }
 
     componentWillReceiveProps(newProps) {
         this.setState({
             modal: newProps.visible
+        })
+    }
+
+    addSound = () => {
+        var newSounds = [...this.state.soundsLike]
+        if (newSounds.length < 5) {
+            newSounds.push('')
+        }
+        this.setState({
+            soundsLike: newSounds
         })
     }
 
@@ -32,10 +43,14 @@ export default class AddWordModal extends React.Component {
         e.preventDefault()
         var self = this
         var word = ReactDOM.findDOMNode(this.refs.word).value
-        var sounds_like = ReactDOM.findDOMNode(this.refs.sounds_like).value
 
-        console.log(word)
-        console.log(sounds_like)
+        var sounds_like = []
+        for (var i in this.state.soundsLike) {
+            var sound = ReactDOM.findDOMNode(this.refs['sounds_like' + i]).value
+            if (sound != '') {
+                sounds_like.push(ReactDOM.findDOMNode(this.refs['sounds_like' + i]).value)
+            }
+        }
 
         var req = request.post('/api/add_word')
 
@@ -46,6 +61,8 @@ export default class AddWordModal extends React.Component {
             word: word
         })
 
+        req.send({ sounds_like: sounds_like })
+
         var self = this
         req.end(function(err, res) {
             self.props.done()
@@ -55,7 +72,8 @@ export default class AddWordModal extends React.Component {
 
     toggle = () => {
         this.setState({
-            modal: !this.state.modal
+            modal: !this.state.modal,
+            soundsLike: []
         }, () => {
             if (this.state.modal == false) {
                 this.props.onHidden()
@@ -99,21 +117,28 @@ export default class AddWordModal extends React.Component {
                         <div className={this.state.error ? "form-group has-danger" : "form-group"}>
                             <input
                                 style={{marginBottom: '12px'}}
-                                ref="word"
-                                className="form-control"
-                                type="text"
-                                placeholder="display as"/>
-                            <input
-                                ref="sounds_like"
-                                className="form-control"
-                                type="text"
-                                placeholder="sounds like"/>
+                                ref='word'
+                                className='form-control'
+                                type='text'
+                                placeholder='word'/>
+                            {this.state.soundsLike.map((c, i) => {
+                                return (
+                                    <input
+                                        style={{marginBottom: '12px'}}
+                                        key={i}
+                                        ref={'sounds_like' + i}
+                                        className='form-control'
+                                        type='text'
+                                        placeholder='pronunciation'/>
+                                )
+                            })}
                         </div>
                     </form>
                 </ModalBody>
                 <ModalFooter style={{textAlign: 'right'}}>
-                    <Button onClick={this.cancel} text={'cancel'} style={{marginRight: '20px'}}/>
-                    <Button onClick={this.add} kind={"bold"} text={'add'}/>
+                    <Button onClick={this.addSound} text={'Add sound'} style={{position: 'absolute', left:'15px'}}/>
+                    <Button onClick={this.cancel} text={'Cancel'} style={{marginRight: '20px'}}/>
+                    <Button onClick={this.add} kind={'bold'} text={'Create'}/>
                 </ModalFooter>
             </Modal>
         )

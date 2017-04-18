@@ -317,6 +317,7 @@ export default class UpdateModel extends React.Component {
             marginRight: '-22px',
             backgroundColor: '#dedede',
         }
+        
         var self = this
         var wordSize = 0
         for (var i = 0; i < 6; i++) {

@@ -9,6 +9,7 @@ var multer = require('multer');
 var fs = require('fs');
 var crypto = require('crypto');
 var mime = require('mime-types')
+var bodyParser = require('body-parser')
 var app = express();
 
 var PORT = process.env.VCAP_APP_PORT || 8080; //bluemix
@@ -26,6 +27,7 @@ if(process.env.NODE_ENV !== 'production') {
 }
 
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use(bodyParser.json());
 
 app.get('/', function(request, response) {
     response.sendFile(__dirname + '/dist/index.html')
@@ -70,7 +72,7 @@ app.post('/api/add_word', function(req, res) {
 
     request.put('https://stream.watsonplatform.net/speech-to-text/api/v1/customizations/' + encodeURIComponent(req.query.customization_id) + '/words/' + encodeURIComponent(req.query.word))
     .auth(username, password)
-    .send({sounds_like: req.query.sounds_like})
+    .send({sounds_like: req.body.sounds_like})
     .send({display_as: req.query.display_as})
     .end(function(err, response) {
         if (err) {
