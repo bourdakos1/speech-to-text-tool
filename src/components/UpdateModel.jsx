@@ -11,6 +11,7 @@ import Word from './Word'
 import AddWordModal from './AddWordModal'
 import Base from './Base'
 import DropButton from './DropButton'
+import SearchBar from './SearchBar'
 
 var wordCount = 1
 var corpusCount = 0
@@ -34,18 +35,18 @@ export default class UpdateModel extends React.Component {
     filterWords = () => {
         var self = this
         var newWords = this.state.words.filter((element) => {
-            if (self.state.search == '' && self.state.corporaFilter == '') {
+            if (self.state.search.trim() == '' && self.state.corporaFilter == '') {
                 return true
             }
             if (element.source.indexOf(self.state.corporaFilter) > -1) {
-                if (self.state.search == '') {
+                if (self.state.search.trim() == '') {
                     return true
                 }
-                if (element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
+                if (element.word.toLowerCase().includes(self.state.search.toLowerCase().trim())) {
                     return true
                 }
             }
-            if (self.state.corporaFilter == '' && element.word.toLowerCase().includes(self.state.search.toLowerCase())) {
+            if (self.state.corporaFilter == '' && element.word.toLowerCase().includes(self.state.search.toLowerCase().trim())) {
                 return true
             }
             return false
@@ -238,31 +239,6 @@ export default class UpdateModel extends React.Component {
         })
     }
 
-    filterUser = () => {
-        this.setState({
-            corporaFilter: 'user'
-        }, () => {
-            this.filterWords()
-        })
-    }
-
-    filterCorpus = (e) => {
-        console.log(e.target.id)
-        this.setState({
-            corporaFilter: e.target.id
-        }, () => {
-            this.filterWords()
-        })
-    }
-
-    filterAll = () => {
-        this.setState({
-            corporaFilter: ''
-        }, () => {
-            this.filterWords()
-        })
-    }
-
     showAddWordModal = () => {
         this.setState({
             addWord: true
@@ -277,6 +253,22 @@ export default class UpdateModel extends React.Component {
 
     uploaded = () => {
         this.loadWords()
+    }
+
+    setSearch = (search) => {
+        var thing = new RegExp(/(?=corpus:)\S+/).exec(search)
+        var corpus = ''
+        if (thing != null) {
+             corpus = thing[0].split(':')[1]
+        }
+
+        search = search.replace(thing, '')
+        this.setState({
+            corporaFilter: corpus,
+            search: search
+        }, () => {
+            this.filterWords()
+        })
     }
 
     render() {
@@ -327,6 +319,9 @@ export default class UpdateModel extends React.Component {
                 wordSize += 83 + (this.state.filteredWords[i].soundsLike.length * 21)
             }
         }
+
+        var searchCorpora = [{name: 'user'}, ...this.state.corpora]
+
         return (
             <div style={{marginTop: '40px', marginBottom: '40px'}}>
                 <TitleCard
@@ -340,7 +335,7 @@ export default class UpdateModel extends React.Component {
                         Corpora
                     </div>
                     <div style={[textStyles.base, {marginTop: '0px', marginBottom: '30px'}]}>
-                        You can upload a corpus and speech to text will extract new words within context.
+                        Upload a corpus and Speech-To-Text will extract new words within context.
                     </div>
 
                     <DropButton
@@ -368,21 +363,12 @@ export default class UpdateModel extends React.Component {
                         Words
                     </div>
                     <div style={[textStyles.base, {marginTop: '0px', marginBottom: '30px'}]}>
-                        Sounds like are variations of how people can pronounce the words.
+                        Adding words to a model helps Speech-To-Text pick up on words not in Watson’s vocabulary.
                     </div>
 
-                    <input
-                        type={'text'}
-                        id={'638tq7dhiuowiju8qw'}
-                        placeholder={'search'}
-                        onChange={this.onTextChange} />
-                    <button onClick={this.filterUser}>user</button>
-                    {this.state.corpora.map((corpus) => {
-                        return(
-                            <button id={corpus.name} key={corpus.name} onClick={self.filterCorpus}>{corpus.name}</button>
-                        )
-                    })}
-                    <button onClick={this.filterAll}>all</button>
+                    {console.log(searchCorpora)}
+
+                    <SearchBar setSearch={this.setSearch} corpora={searchCorpora}/>
 
                     {this.state.error ? <div style={error}>{this.state.error}</div> : null}
                     <AutoSizer disableHeight>

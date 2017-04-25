@@ -53,13 +53,14 @@ export default class CredentialsModal extends React.Component {
     }
 
     toggle = () => {
+        var temp = !this.state.modal
         this.setState({
             modal: !this.state.modal
-        }, () => {
-            if (this.state.modal == false) {
-                this.props.onHidden()
-            }
         })
+
+        if (temp == false) {
+            this.props.onHidden()
+        }
     }
 
     render() {

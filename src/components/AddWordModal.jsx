@@ -138,7 +138,7 @@ export default class AddWordModal extends React.Component {
                 <ModalFooter style={{textAlign: 'right'}}>
                     <Button onClick={this.addSound} text={'Add sound'} style={{position: 'absolute', left:'15px'}}/>
                     <Button onClick={this.cancel} text={'Cancel'} style={{marginRight: '20px'}}/>
-                    <Button onClick={this.add} kind={'bold'} text={'Create'}/>
+                    <Button onClick={this.add} kind={'bold'} text={'Add'}/>
                 </ModalFooter>
             </Modal>
         )
