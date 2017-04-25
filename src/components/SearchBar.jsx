@@ -153,7 +153,7 @@ export default class SearchBar extends React.Component {
                     onChange={this.handleChange}
                     style={[search, this.props.style]}
                     type={'text'}
-                    placeholder={'Search'} />
+                    placeholder={this.state.value == '' ? 'Search' : ''} />
                 {this.state.showDropdown ?
                     <div style={dropdownContent}>
                         {this.props.corpora.map((corpus, i) => {
