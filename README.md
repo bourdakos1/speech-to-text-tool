@@ -2,7 +2,7 @@
 
 http://speech-to-text-tooling.mybluemix.net
 
-[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/bourdakos1/speech-to-text-tool)
+[![Deploy to Bluemix](https://console.ng.bluemix.net/devops/setup/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/bourdakos1/speech-to-text-tool)
 
 ## Getting started 
 
