@@ -1,8 +1,8 @@
-# Watson Visual Recognition Tool
+# Watson Speech to Text Tool
 
-http://vr-tool.mybluemix.net
+http://speech-to-text-tooling.mybluemix.net
 
-[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/boxcarton/watson-visual-recognition-tool-client)
+[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/bourdakos1/speech-to-text-tool)
 
 ## Getting started 
 
