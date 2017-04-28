@@ -29,7 +29,7 @@ export default class CredentialsModal extends React.Component {
         var username = ReactDOM.findDOMNode(this.refs.username).value
         var password = ReactDOM.findDOMNode(this.refs.password).value
 
-        var req = request.post('/api/test_credentials')
+        var req = request.post('/api/validate')
 
         req.query({
             username: username,

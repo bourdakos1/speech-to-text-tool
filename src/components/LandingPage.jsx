@@ -18,7 +18,7 @@ export default class LandingPage extends React.Component {
     setApiKey = (e) => {
         e.preventDefault()
         var self = this
-        var req = request.get('/api/validate')
+        var req = request.post('/api/validate')
 
         var username = self.state.key.split(":")[0]
         var password = self.state.key.split(":")[1]

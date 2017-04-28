@@ -55,7 +55,7 @@ app.post('/api/token', function(req, res) {
     });
 });
 
-app.post('/api/test_credentials', function(req, res) {
+app.post('/api/validate', function(req, res) {
     var username = req.query.username;
     var password = req.query.password;
 
