@@ -83,6 +83,7 @@ app.post('/api/add_word', function(req, res) {
     });
 });
 
+// COPY THIS
 app.post('/api/delete_word', function(req, res) {
     var username = req.query.username;
     var password = req.query.password;

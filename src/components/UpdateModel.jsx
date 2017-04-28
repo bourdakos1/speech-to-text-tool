@@ -352,6 +352,8 @@ export default class UpdateModel extends React.Component {
                     <div>
                         {this.state.corpora.map((corpus) => {
                             return(
+                                // Change this to a corpus component
+                                // ie <Corpus key={corpus.id} corpus={corpus}/>
                                 <div key={corpus.id}>{corpus.name} : {corpus.status}</div>
                             )
                         })}
