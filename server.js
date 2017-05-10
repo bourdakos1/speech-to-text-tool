@@ -99,6 +99,21 @@ app.post('/api/delete_word', function(req, res) {
     });
 });
 
+app.delete('/api/delete_corpus', function(req, res) {
+    var username = req.query.username;
+    var password = req.query.password;
+
+    request.del('https://stream.watsonplatform.net/speech-to-text/api/v1/customizations/' + encodeURIComponent(req.query.customization_id) + '/corpora/' + encodeURIComponent(req.query.corpus_name))
+    .auth(username, password)
+    .end(function(err, response) {
+        if (err) {
+            res.send(err);
+            return;
+        }
+        res.send(response.body);
+    });
+});
+
 app.post('/api/list_words', function(req, res) {
     var username = req.query.username;
     var password = req.query.password;

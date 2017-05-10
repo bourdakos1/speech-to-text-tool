@@ -8,6 +8,7 @@ import Strings from './Strings'
 import TitleCard from './TitleCard'
 import Button from './Button'
 import Word from './Word'
+import Corpus from './Corpus'
 import AddWordModal from './AddWordModal'
 import Base from './Base'
 import DropButton from './DropButton'
@@ -214,6 +215,20 @@ export default class UpdateModel extends React.Component {
         })
     }
 
+    deleteCorpus = (corpusName) => {
+        var self = this
+        var req = request.del('/api/delete_corpus')
+
+        req.query({ username: localStorage.getItem('username') })
+        req.query({ password: localStorage.getItem('password') })
+        req.query({ customization_id: this.props.match.params.customizationID })
+        req.query({ corpus: corpusName })
+
+        req.end((err, res) => {
+            self.loadCorpora()
+        })
+    }
+
     cancel = () => {
         this.props.history.push('/')
     }
@@ -354,7 +369,8 @@ export default class UpdateModel extends React.Component {
                             return(
                                 // Change this to a corpus component
                                 // ie <Corpus key={corpus.id} corpus={corpus}/>
-                                <div key={corpus.id}>{corpus.name} : {corpus.status}</div>
+                                //<div key={corpus.id}>{corpus.name} : {corpus.status}</div>
+                                <Corpus key={corpus.id} corpus={corpus} delete={this.deleteCorpus}/>
                             )
                         })}
                     </div>
