@@ -7,8 +7,8 @@ import TitleCard from './TitleCard'
 
 @Radium
 export default class Corpus extends React.Component {
-  delete = () => {
-      this.props.delete(this.props.corpus)
+  deleteCorpus = () => {
+      this.props.deleteCorpus(this.props.corpus.name)
   }
 
   render() {
@@ -60,7 +60,7 @@ export default class Corpus extends React.Component {
                               className={'delete-class'}
                               key={this.props.key}
                               style={deleteStyle}
-                              onClick={this.delete}>
+                              onClick={this.deleteCorpus}>
                           </button>
                       </div>
                   </div>

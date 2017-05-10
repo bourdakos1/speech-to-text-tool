@@ -215,14 +215,14 @@ export default class UpdateModel extends React.Component {
         })
     }
 
-    deleteCorpus = (corpus) => {
+    deleteCorpus = (corpusName) => {
         var self = this
-        var req = request.post('/api/delete_corpus')
+        var req = request.del('/api/delete_corpus')
 
         req.query({ username: localStorage.getItem('username') })
         req.query({ password: localStorage.getItem('password') })
         req.query({ customization_id: this.props.match.params.customizationID })
-        req.query({ corpus: corpus })
+        req.query({ corpus: corpusName })
 
         req.end((err, res) => {
             self.loadCorpora()
